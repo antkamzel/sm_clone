@@ -18,32 +18,17 @@ export default defineConfig({
         lang: "en",
         icons: [
           {
-            src: "icons/pwa-48x48.png",
+            src: "icons/android-launchericon-48-48.png",
             sizes: "48x48",
             type: "image/png",
           },
           {
-            src: "icons/pwa-72x72.png",
-            sizes: "72x72",
-            type: "image/png",
-          },
-          {
-            src: "icons/pwa-96x96.png",
-            sizes: "96x96",
-            type: "image/png",
-          },
-          {
-            src: "icons/pwa-144x144.png",
-            sizes: "144x144",
-            type: "image/png",
-          },
-          {
-            src: "icons/pwa-192x192.png",
+            src: "icons/android-launchericon-192-192.png",
             sizes: "192x192",
             type: "image/png",
           },
           {
-            src: "icons/pwa-512x512.png",
+            src: "icons/android-launchericon-512-512.png",
             sizes: "512x512",
             type: "image/png",
           },
