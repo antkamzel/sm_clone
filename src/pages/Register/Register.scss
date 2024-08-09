@@ -1,0 +1,77 @@
+
+.register {
+    width: 100%; height: 100%; display: flex; align-items: center; justify-content: end; flex-direction: column; margin: auto;
+}
+
+.register .register-form {
+    width: min(650px, 100%); height: min(530px, 95vh); background: var(--primary-shade-2); border-radius: var(--br-5) var(--br-5) 0 0;
+    padding: var(--spacing-9) var(--spacing-8); display: flex; flex-direction: column; gap: var(--spacing-2);
+}
+
+.register .register-form .title {
+    font-size: var(--fs-6); text-align: center;
+}
+
+.register .register-form .subtitle {
+    opacity: 0.3; margin-bottom: var(--spacing-5); text-align: center;
+}
+
+.register .register-form .profilepic-selector {
+    display: flex; gap: var(--spacing-10); min-height: 45px;
+}
+
+.register .register-form .profilepic-selector > p {
+    height: fit-content; margin-block: auto;
+}
+
+.register .register-form .profilepic-selector .swiper {
+    max-width: 42px; max-height: 42px; border-radius: 50%; overflow: hidden;
+}
+
+.register .register-form .profilepic-selector .choose-image-wrapper {
+    max-height: 42px; width: 42px;
+}
+
+.register .register-form .profilepic-selector .choose-image-wrapper .swiper-container {
+    position: relative;
+}
+
+.register .register-form .profilepic-selector .choose-image-wrapper .swiper-container > .select-image-btn {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: grid; place-items: center; opacity: 0;
+}
+
+.register .register-form .profilepic-selector .choose-image-wrapper  .select-image-btn{
+    padding: 0; width: 100%; height: 100%; display: grid; place-items: center;
+}
+
+.register .register-form .profilepic-selector .choose-image-wrapper .swiper-comp .swiper-wrapper img {
+    object-fit: cover;
+}
+
+.register .register-form .profilepic-selector *[class*='swiper-button-'] {
+    display: none;
+}
+
+.register .register-form .forgot-link {
+    font-size: var(--fs-2); margin-top: var(--spacing-5);
+}
+
+.register .register-form .submit-btn {
+    display: grid; place-items: center; height: 46px; margin-top: auto; background: var(--primary-shade-3); width: 100%;
+    padding: var(--spacing-4) var(--spacing-8); border-radius: var(--br-1); border: none; 
+    outline: none; font-weight: 600; letter-spacing: 2px; font-size: var(--fs-3);
+}
+
+.register .register-form .submit-btn:disabled {
+    opacity: 0.5; pointer-events: none;
+}
+
+.register * {
+    color: var(--contrast-basic);
+}
+
+@media (max-height: 700px) {
+    .login .login-intro {
+        display: none;
+    }
+}

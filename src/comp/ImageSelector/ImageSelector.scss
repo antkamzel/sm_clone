@@ -1,0 +1,57 @@
+
+.image-selector-comp input[type='file'] {
+    display: none;
+}
+.image-selector-comp .choose-image-wrapper {
+    position: relative;
+    width: 100%;
+    background: var(--primary-shade-2);
+    height: 300px;
+    max-height: 350px;
+    border-radius: 12px;
+    overflow: hidden;
+}
+.image-selector-comp .choose-image-wrapper .select-image-btn {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: var(--primary-shade-3);
+    display: flex;
+    padding: var(--spacing-4);
+    font-size: var(--fs-4);
+    border-radius: 50%;
+}
+.image-selector-comp .swiper-container {
+    width: 100%;
+    height: 100%;
+}
+
+
+
+.image-selector-comp .swiper-container .select-image-btn {
+    left: unset;
+    right: 5px;
+    top: 5px;
+    transform: none;
+    padding: var(--spacing-4);
+    z-index: 20;
+}
+.image-selector-comp .wrapper-flex {
+    display: flex;
+    gap: 8px;
+    padding: 8px;
+}
+.image-selector-comp .wrapper-flex > .pagination-item {
+    width: 52px;
+    height: 52px;
+    border-radius: 8px;
+    object-fit: cover;
+    opacity: 0.3;
+}
+.image-selector-comp .wrapper-flex > .pagination-item.pagination-active {
+    opacity: 1;
+}
+.image-selector-comp .wrapper-flex :where(.pagination-item.dragging) {
+    opacity: 0 !important;
+}

@@ -1,0 +1,71 @@
+.login {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: end;
+  flex-direction: column;
+  margin: auto;
+}
+
+.login .login-intro {
+  padding-inline: var(--spacing-8);
+  position: fixed;
+  top: 20px;
+}
+
+.login .login-intro h2 {
+  font-size: var(--fs-7);
+  text-align: center;
+}
+
+.login .login-form {
+  width: 100%;
+  height: min(430px, 95vh);
+  background: var(--primary-shade-2);
+  border-radius: var(--br-5) var(--br-5) 0 0;
+  padding: var(--spacing-9) var(--spacing-8);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2);
+}
+
+.login .login-form .title {
+  font-size: var(--fs-6);
+  text-align: center;
+}
+
+.login .login-form .subtitle {
+  opacity: 0.3;
+  margin-bottom: var(--spacing-5);
+  text-align: center;
+}
+
+.login .login-form .forgot-link {
+  font-size: var(--fs-2);
+}
+
+.login .login-form .submit-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: auto;
+  background: var(--primary-shade-3);
+  width: 100%;
+  padding: var(--spacing-4) var(--spacing-8);
+  border-radius: var(--br-1);
+  height: 46px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  font-size: var(--fs-3);
+}
+
+.login .login-form * {
+  color: var(--contrast-basic);
+}
+
+@media (max-height: 700px) {
+  .login .login-intro {
+    display: none;
+  }
+}

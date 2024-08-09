@@ -1,0 +1,143 @@
+.post-item {
+  padding-block: var(--spacing-3);
+}
+
+.post-item .post-top-row {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  margin-bottom: var(--spacing-3);
+  padding-inline: var(--spacing-3);
+}
+
+.post-item .post-top-row img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.post-item .post-top-row .profile-info {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-1);
+}
+
+.post-item .post-top-row .profile-info p {
+  margin: 0;
+  line-height: 1em;
+  font-size: var(--fs-4);
+}
+
+.post-item .post-top-row .profile-info .creation-time {
+  opacity: 0.4;
+  font-size: var(--fs-1);
+  letter-spacing: 1px;
+}
+
+.post-item .post-top-row .more-options {
+  margin-left: auto;
+}
+
+.post-item .post-top-row .more-options svg {
+  font-size: var(--fs-4);
+}
+
+.post-item .post-slider {
+  width: 100%;
+  min-height: 200px;
+  max-height: 370px;
+}
+
+.post-item .post-slider img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.post-item .post-slider .swiper-comp {
+  width: 100%;
+  height: 100%;
+  background: var(--primary-shade-2);
+}
+
+.post-item .post-info {
+  padding: var(--spacing-3);
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.post-item .post-info span {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-1);
+}
+
+.post-item .post-info span:not(:last-of-type) {
+  position: relative;
+  padding-right: var(--spacing-3);
+  margin-right: var(--spacing-3);
+}
+
+.post-item .post-info span:not(:last-of-type)::after {
+  content: "";
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  right: -2px;
+  top: 50%;
+  background-color: var(--contrast-basic);
+  border-radius: 50%;
+}
+
+.post-item .post-title {
+  padding: var(--spacing-3);
+}
+
+.post-item .post-title h3 {
+  line-height: 1.7rem;
+  font-weight: 500;
+}
+
+.post-item .post-actions {
+  display: flex;
+  gap: var(--spacing-6);
+  padding: var(--spacing-3);
+}
+
+.post-item .post-actions button {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-1);
+  background: transparent;
+  border: none;
+  font-size: var(--fs-3);
+}
+
+.post-item .post-actions button svg {
+  font-size: var(--fs-5);
+}
+
+.post-item:not(:last-of-type) {
+  border-bottom: 1px solid var(--primary-shade-3);
+}
+
+/* Skeleton Loader CSS */
+.image-skeleton {
+  width: 100%;
+  height: 100%; /* Adjust this height to match your container's height */
+  background-color: #e0e0e013;
+  animation: pulse 1.5s infinite ease-in-out;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.4;
+  }
+  100% {
+    opacity: 1;
+  }
+}

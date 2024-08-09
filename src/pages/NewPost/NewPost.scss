@@ -1,0 +1,168 @@
+.new-post {
+    --border-1: 1px solid var(--primary-shade-3);
+    --border-radius-1: var(--br-2);
+
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+/* Placeholder Styles */
+.new-post *::placeholder {
+    opacity: 0.3;
+    color: var(--basic-contrast);
+    letter-spacing: 1px;
+    font-weight: 100;
+}
+
+/* Header Styles */
+.new-post header {
+    background: var(--primary-shade-2);
+    padding: var(--spacing-4) var(--spacing-4);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-3);
+    letter-spacing: 1px;
+    box-shadow: var(--bs-3);
+    border-radius: 0 0 var(--br-1) var(--br-1);
+    position: sticky;
+    top: 0;
+    z-index: 99;
+    box-shadow: 0 2px 5px #0000003d;
+}
+
+.new-post header * {
+    color: var(--basic-contrast);
+}
+
+.new-post header p {
+    font-size: 18px;
+}
+
+.new-post header svg {
+    font-size: var(--fs-4);
+}
+
+.new-post header button {
+    background: none;
+    border: 0;
+    outline: 0;
+}
+
+.new-post header .upload-post-btn[disabled] {
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+/* Content Styles */
+.new-post .content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: var(--spacing-5);
+}
+
+/* Images Wrapper Styles */
+.new-post .content .images-wrapper {
+    border-radius: var(--br-1);
+    overflow: hidden;
+}
+
+/* Input Fields Wrapper Styles */
+.new-post .content .input-fields-wrapper {
+    margin-top: var(--spacing-4);
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-5);
+}
+
+.new-post .content .input-fields-wrapper .input-wrapper {
+    padding: var(--spacing-6);
+    border-radius: var(--border-radius-1);
+    background: var(--primary-shade-1);
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-1);
+}
+
+.new-post .content .input-fields-wrapper .input-wrapper > input {
+    width: 100%;
+    padding: var(--spacing-2) var(--spacing-1);
+    border-bottom: var(--border-1);
+}
+
+/* React Dropdown Select Styles */
+.new-post .content .input-fields-wrapper .input-wrapper .react-dropdown-select {
+    border: var(--border-1);
+    width: min(200px, 100%);
+    margin-top: var(--spacing-3);
+    border-radius: var(--br-1);
+    padding-inline: var(--spacing-3);
+    height: 44px;
+    background: var(--primary-shade-2);
+}
+
+.new-post .content .input-fields-wrapper .input-wrapper .react-dropdown-select > .react-dropdown-select-content > input {
+    outline: none !important;
+}
+
+.new-post .content .input-fields-wrapper .input-wrapper .react-dropdown-select .react-dropdown-select-dropdown {
+    background: var(--primary-shade-2);
+    border: none;
+    border-radius: var(--br-1);
+}
+
+.new-post .content .input-fields-wrapper .input-wrapper .react-dropdown-select .react-dropdown-select-item {
+    border: none;
+}
+
+.new-post .content .input-fields-wrapper .input-wrapper .react-dropdown-select .css-z2hyoe-ItemComponent.react-dropdown-select-item-selected {
+    background: var(--primary-shade-3);
+    text-decoration: underline;
+}
+
+.new-post .content .input-fields-wrapper .input-wrapper .react-dropdown-select:focus-within {
+    box-shadow: none;
+}
+
+/* Upload Post Button Styles */
+.new-post .upload-post-btn {
+    margin-left: auto;
+    display: flex;
+    width: fit-content;
+    justify-content: center;
+    padding: var(--spacing-3);
+    text-align: center;
+    font-size: var(--fs-5);
+    border-radius: var(--br-2);
+    background: var(--primary-shade-3);
+    letter-spacing: 2px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Input Wrapper Flex Styles */
+.new-post .input-wrapper-flex {
+    display: grid;
+    gap: var(--spacing-2);
+    grid-template-columns: repeat(2, 1fr);
+    margin-top: var(--spacing-6);
+}
+
+.new-post .input-wrapper-flex .input-inner {
+    display: flex;
+    max-width: 100px;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.new-post .input-wrapper-flex .input-inner input {
+    border-radius: var(--br-1);
+    height: 30px;
+    width: 100%;
+    max-width: 40px;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    background: var(--primary-shade-3);
+    padding-inline: var(--spacing-2);
+}

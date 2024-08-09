@@ -1,0 +1,300 @@
+:root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+
+  --primary-color: #4a2545;
+  --primary-contrast: white;
+  --secondary-color: #dccca3;
+  --secondary-contrast: rgb(20, 20, 28);
+  --tertiary-color: #90AA86;
+  --tertiary-contrast: rgb(20, 20, 28);
+
+  --spacing-0: 2px;
+  --spacing-1: 5px;
+  --spacing-2: 8px;
+  --spacing-3: 11px;
+  --spacing-4: 14px;
+  --spacing-5: 16px;
+  --spacing-6: 20px;
+  --spacing-7: 24px;
+  --spacing-8: 28px;
+  --spacing-9: 32px;
+  --spacing-10: 40px;
+
+  --fs-0: 6px;
+  --fs-1: 10px;
+  --fs-2: 14px;
+  --fs-3: 16px;
+  --fs-4: 20px;
+  --fs-5: 24px;
+  --fs-6: 32px;
+  --fs-7: 44px;
+  --fs-8: 56px;
+  --fs-9: 64px;
+
+  --br-0: 4px;
+  --br-1: 8px;
+  --br-2: 12px;
+  --br-3: 16px;
+  --br-4: 30px;
+  --br-5: 44px;
+
+  --bs-0: 0 0 30px rgba(14, 14, 14, 0.115);
+  --bs-1: 0 0 23px rgba(14, 14, 14, 0.185);
+  --bs-2: 0 1px 16px rgba(14, 14, 14, 0.178);
+  --bs-3: 0 1px 8px rgba(14, 14, 14, 0.16);
+}
+
+body.dark-theme {
+  --accent-1: rgb(20, 20, 28);
+  --accent-2: rgb(30, 30, 46);
+  --accent-3: rgb(33, 33, 61);
+  --accent-4: rgb(63, 63, 112);
+  --contrast-basic: white;
+
+  --primary-shade-0: #180b15;
+  --primary-shade-1: #2f172b;
+  --primary-shade-2: #3a1d36;
+  --primary-shade-3: #6f3868;
+  --primary-shade-4: #904d87;
+  --primary-shade-5: #a6549b;
+}
+
+body.light-theme {
+  --accent-1: rgb(255, 255, 255);
+  --accent-2: rgb(177, 177, 177);
+  --accent-3: rgb(155, 155, 155);
+  --accent-4: rgb(85, 85, 85);
+  --contrast-basic: rgb(20, 20, 28);
+
+  --primary-shade-5: #e827bb;
+  --primary-shade-4: #e740c9;
+  --primary-shade-3: #ec84de;
+  --primary-shade-2: #e0a5d8;
+  --primary-shade-1: #dfbcdb;
+  --primary-shade-0: #ffffff;
+}
+
+* {
+  box-sizing: border-box;
+  color: var(--contrast-basic);
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  margin: 0;
+  height: 100vh;
+  background: var(--primary-shade-0);
+}
+
+#root:first-of-type {
+  height: 100%;
+}
+
+.app#app:first-of-type {
+  height: 100%;
+}
+
+.app .container{
+  max-width: 1224px;
+  margin: auto;
+  position: relative;
+  height: 100vh;
+}
+.app .container .container-small{
+  max-width: 650px;
+  margin: auto;
+  position: relative;
+  height: 100%;
+}
+
+.swiper-comp {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.swiper-comp [class^='swiper-button'] {
+  color: var(--basic-contrast);
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--primary-shade-4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.swiper-comp [class^='swiper-button']::after {
+  font-size: 13px;
+}
+
+.swiper-comp .swiper-wrapper {
+  display: flex;
+  align-items: center;
+}
+
+.swiper-comp .swiper-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.swiper-comp .swiper-pagination {
+  bottom: 1px;
+  height: 16px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.swiper-comp .swiper-pagination .swiper-pagination-bullet {
+  background: var(--primary-shade-4);
+}
+
+.btn {
+  border: none;
+  outline: none;
+  background: none;
+  cursor: pointer;
+}
+
+.btn:focus-visible {
+  outline: 1px solid var(--contrast-basic);
+}
+
+input {
+  background: none;
+  outline: none;
+  border: none;
+}
+
+.hidden {
+  display: none !important;
+}
+
+.primary {
+  background: var(--primary-color);
+  color: var(--primary-contrast);
+}
+
+.primary * {
+  color: var(--primary-contrast);
+}
+
+.primary.outline {
+  background: var(--primary-contrast);
+  outline: 1px solid var(--primary-color);
+  color: var(--primary-color);
+}
+
+.primary.outline * {
+  color: var(--primary-color);
+}
+
+.secondary {
+  background: var(--secondary-color);
+  color: var(--secondary-contrast);
+}
+
+.secondary * {
+  color: var(--secondary-contrast);
+}
+
+.secondary.outline {
+  background: white;
+  outline: 1px solid var(--secondary-color);
+  color: var(--secondary-color);
+}
+
+.secondary.outline * {
+  color: var(--secondary-color);
+}
+
+.tertiary {
+  background: var(--tertiary-color);
+  color: var(--tertiary-contrast);
+}
+
+.tertiary * {
+  color: var(--tertiary-contrast);
+}
+
+.tertiary.outline {
+  background: white;
+  outline: 1px solid var(--tertiary-color);
+  color: var(--tertiary-color);
+}
+
+.tertiary.outline * {
+  color: var(--tertiary-color);
+}
+
+@import 'swiper/css';
+@import 'swiper/css/navigation';
+@import 'swiper/css/pagination';
+@import 'swiper/css/scrollbar';
+@import "swiper/swiper-bundle.css";
+
+.loader-spinner {
+  width: 48px;
+  height: 48px;
+  border: 5px solid #FFF;
+  border-bottom-color: var(--primary-shade-3);
+  border-radius: 50%;
+  display: inline-block;
+  box-sizing: border-box;
+  animation: rotation 1s linear infinite;
+}
+
+@keyframes rotation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.creds-input {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3);
+  margin-bottom: var(--spacing-5);
+  position: relative;
+}
+
+.creds-input label {
+  flex: 1;
+}
+
+.creds-input input {
+  border-bottom: 1px solid var(--accent-4);
+  padding: var(--spacing-2);
+  width: 70%;
+}
+
+.creds-input input:focus {
+  border-color: var(--contrast-basic);
+}
+
+.creds-input input::placeholder {
+  letter-spacing: 2px;
+  opacity: 0.5;
+}
+
+.creds-input ::-ms-reveal {
+  filter: invert(50%);
+}
+
+.creds-input .error-message {
+  display: none;
+  position: absolute;
+  bottom: -20px;
+  right: 0;
+  color: red;
+  font-size: 12px;
+}
