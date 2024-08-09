@@ -11,6 +11,7 @@ const App = () => {
   }, []);
 
   const checkUser = async () => {
+    console.log('ekala123');
     const resp = await supabase.auth.getSession();
     const userIsAuthenticated = !!(resp.data.session);
     

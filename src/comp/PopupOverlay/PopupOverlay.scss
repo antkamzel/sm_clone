@@ -1,22 +1,51 @@
-.popup-overlay{
-    position: fixed;inset: 0 0 0 0; background: rgba(0, 0, 0, 0.368);z-index: 99; display: none;place-items: center;
-    .popup{
-        position: relative; background: var(--primary-shade-0); width: min(300px, 95%); 
-        overflow: auto; border-radius: var(--br-1); padding-block: 56px;
-        display: grid; place-items: center;
-        .close-btn{
-            position: absolute; top: 10px; right: 10px; background: var(--primary-shade-2); border: none; outline: none; display: grid;
-            place-items: center; padding: var(--spacing-1); font-size: var(--fs-3); border-radius: 50%;
-        }
-        .popup-content{
-            width: min(300px, 85%);
-            .popup-title{margin-bottom: var(--spacing-4);}
-            .popup-txt:not(:last-of-type){margin-bottom: var(--spacing-4);}
-        }
-    }
-    .loader-spinner{
-
-    }
-    
+.popup-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.368);
+  z-index: 99;
+  display: none;
+  place-items: center;
 }
-.popup-overlay.overlay-visible{display: grid;}
+
+.popup-overlay .popup {
+  position: relative;
+  background: var(--primary-shade-0);
+  width: min(300px, 95%);
+  overflow: auto;
+  border-radius: var(--br-1);
+  padding-block: 56px;
+  display: grid;
+  place-items: center;
+  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.199);
+}
+
+.popup-overlay .popup .close-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: var(--primary-shade-2);
+  border: none;
+  outline: none;
+  display: grid;
+  place-items: center;
+  width: 35px;
+  height: 35px;
+  font-size: var(--fs-4);
+  border-radius: 50%;
+}
+
+.popup-overlay .popup .popup-content {
+  width: min(300px, 85%);
+}
+
+.popup-overlay .popup .popup-content .popup-title {
+  margin-bottom: var(--spacing-4);
+}
+
+.popup-overlay .popup .popup-content .popup-txt:not(:last-of-type) {
+  margin-bottom: var(--spacing-4);
+}
+
+.popup-overlay.overlay-visible {
+  display: grid;
+}

@@ -1,12 +1,14 @@
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap");
+
 :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: "Open Sans";
   line-height: 1.5;
 
   --primary-color: #4a2545;
   --primary-contrast: white;
   --secondary-color: #dccca3;
   --secondary-contrast: rgb(20, 20, 28);
-  --tertiary-color: #90AA86;
+  --tertiary-color: #90aa86;
   --tertiary-contrast: rgb(20, 20, 28);
 
   --spacing-0: 2px;
@@ -96,13 +98,13 @@ body {
   height: 100%;
 }
 
-.app .container{
+.app .container {
   max-width: 1224px;
   margin: auto;
   position: relative;
   height: 100vh;
 }
-.app .container .container-small{
+.app .container .container-small {
   max-width: 650px;
   margin: auto;
   position: relative;
@@ -117,7 +119,7 @@ body {
   height: 100%;
 }
 
-.swiper-comp [class^='swiper-button'] {
+.swiper-comp [class^="swiper-button"] {
   color: var(--basic-contrast);
   width: 24px;
   height: 24px;
@@ -128,7 +130,7 @@ body {
   justify-content: center;
 }
 
-.swiper-comp [class^='swiper-button']::after {
+.swiper-comp [class^="swiper-button"]::after {
   font-size: 13px;
 }
 
@@ -233,16 +235,10 @@ input {
   color: var(--tertiary-color);
 }
 
-@import 'swiper/css';
-@import 'swiper/css/navigation';
-@import 'swiper/css/pagination';
-@import 'swiper/css/scrollbar';
-@import "swiper/swiper-bundle.css";
-
 .loader-spinner {
   width: 48px;
   height: 48px;
-  border: 5px solid #FFF;
+  border: 5px solid #fff;
   border-bottom-color: var(--primary-shade-3);
   border-radius: 50%;
   display: inline-block;
@@ -275,6 +271,8 @@ input {
   border-bottom: 1px solid var(--accent-4);
   padding: var(--spacing-2);
   width: 70%;
+  letter-spacing: 1.2px;
+  font-size: var(--fs-2);
 }
 
 .creds-input input:focus {
@@ -282,8 +280,8 @@ input {
 }
 
 .creds-input input::placeholder {
-  letter-spacing: 2px;
-  opacity: 0.5;
+  letter-spacing: 1.2px;
+  opacity: 0.7;
 }
 
 .creds-input ::-ms-reveal {
@@ -298,3 +296,17 @@ input {
   color: red;
   font-size: 12px;
 }
+
+.creds-input input:-webkit-autofill,
+.creds-input input:-webkit-autofill:hover,
+.creds-input input:-webkit-autofill:focus,
+.creds-input input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 30px var(--primary-shade-2) inset !important;
+  -webkit-text-fill-color: white;
+}
+
+@import "swiper/css";
+@import "swiper/css/navigation";
+@import "swiper/css/pagination";
+@import "swiper/css/scrollbar";
+@import "swiper/swiper-bundle.css";
