@@ -110,10 +110,12 @@
     background: var(--primary-shade-2);
     border: none;
     border-radius: var(--br-1);
+    padding: 0;
 }
 
 .new-post .content .input-fields-wrapper .input-wrapper .react-dropdown-select .react-dropdown-select-item {
     border: none;
+    padding: var(--spacing-3) var(--spacing-4);
 }
 
 .new-post .content .input-fields-wrapper .input-wrapper .react-dropdown-select .css-z2hyoe-ItemComponent.react-dropdown-select-item-selected {

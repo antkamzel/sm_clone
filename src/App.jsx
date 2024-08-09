@@ -11,15 +11,14 @@ const App = () => {
   }, []);
 
   const checkUser = async () => {
-    console.log('ekala123');
     const resp = await supabase.auth.getSession();
     const userIsAuthenticated = !!(resp.data.session);
-    
-    const publicPaths = ["/login", "/register"]; // Paths that don't require authentication
+
+    const publicPaths = ["/login", "/register", "/"]; // Paths that don't require authentication
     const currentPath = location.pathname;
 
     if (!userIsAuthenticated && !publicPaths.includes(currentPath)) {
-      nav('/login');
+      nav('/login', { replace: true });
     } else if (userIsAuthenticated && publicPaths.includes(currentPath)) {
       nav('/home', { replace: true });
     }

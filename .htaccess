@@ -1,0 +1,19 @@
+RewriteEngine On
+RewriteBase /
+
+# Set MIME type for .webmanifest files
+AddType application/manifest+json .webmanifest
+
+# Set MIME type for .js files
+AddType application/javascript .js
+
+# Allow requests for manifest and other assets
+RewriteRule ^manifest\.webmanifest$ - [L]
+RewriteRule ^sw\.js$ - [L]
+RewriteRule ^icons/ - [L]
+
+# Existing rules for other requests
+RewriteRule ^index\.html$ - [L]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule . /index.html [L]

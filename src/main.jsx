@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client';
 import {
   createBrowserRouter,
   RouterProvider,
+  Navigate
 } from "react-router-dom";
 import './index.scss';
 import Home from './pages/Home/Home.jsx';
@@ -20,6 +21,10 @@ const router = createBrowserRouter([
     path: "/", // Root path
     element: <App/>,
     children: [
+      {
+        path: "",
+        element: <Navigate to="login" />, // Redirect from "/" to "/login"
+      },
       {
         path: "home",
         element: <Home/>,

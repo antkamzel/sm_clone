@@ -36,7 +36,7 @@ const Login = () => {
     <div className="container-small" style={{height: '100vh'}}>
       <div className="login">
         <div className="login-intro">
-          <h2>Welcome to this demo app.</h2>
+          <h2>Welcome to this demo app</h2>
         </div>
         <div className="login-form">
           <h2 className="title">Log in</h2>
