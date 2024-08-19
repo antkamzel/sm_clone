@@ -1,15 +1,15 @@
-import React, { useEffect, useLayoutEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import './Home.scss';
 import profilePic from  '../../assets/profile-pic.png';
-import imagePlace1 from  '../../assets/img-place-1.jpg';
-import imagePlace2 from  '../../assets/img-place-2.jpg';
-import { Link, useNavigate } from 'react-router-dom';
-import { IoAdd, IoChatboxOutline, IoDesktopOutline, IoFilterOutline, IoHeartOutline, IoLogOut, IoMoon, IoNotificationsOutline, IoPerson, IoSearchCircleOutline, IoSearchOutline, IoSunny, IoTimeOutline, IoWifiOutline } from 'react-icons/io5';
+import { Link, useNavigate, useSearchParams, useLocation} from 'react-router-dom';
+import { IoAdd, IoLogOut, IoPerson} from 'react-icons/io5';
 import { BsThreeDots } from "react-icons/bs";
 import { supabase } from '../../clients/SupabaseClient';
 import PostItem from '../../comp/PostItem/PostItem';
 import NewPostBtn from '../../comp/NewPostBtn/NewPostBtn';
 import LoaderWrapper from '../../comp/LoaderWrapper/LoaderWrapper';
+import { useSelector, useDispatch } from 'react-redux';
+import { setPosts, clearPosts } from '../../state/posts/postsStore';
 
 
 
@@ -17,7 +17,12 @@ import LoaderWrapper from '../../comp/LoaderWrapper/LoaderWrapper';
 
 const Home = () => {
 
+  // Get the search parameters from the URL
   const nav = useNavigate();
+  const dispatch = useDispatch();
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const stateposts = useSelector((state) => state.posts.posts);
 
   // refs
   const profilePopup = useRef();
@@ -99,11 +104,13 @@ const Home = () => {
   
   const goToProfile = (ev) => {
     ev.stopPropagation();
+    nav(`/profile`);
   }
 
   const handleLogout = async (ev) => {
     ev.stopPropagation();
     await supabase.auth.signOut();
+    dispatch(clearPosts());
     nav('/login', {replace: true});
   }
 
@@ -121,6 +128,7 @@ const Home = () => {
       return new Date(b.created_at) - new Date(a.created_at)
     })
     setAllPosts(resp.data);
+    dispatch(setPosts(resp.data));
     setContentReady(true);
   }
 
@@ -156,9 +164,26 @@ const Home = () => {
 
   // use effects
   useEffect(() => {
-    fetchPosts();
+    // Check if 'updates' parameter is set to 'true'
+    const updates = searchParams.get('updates') === 'true';
+
+    // if there is/is not an updates paramter
+    if(!updates){
+      if(stateposts.length > 0){
+        setAllPosts(stateposts);// Use the posts from Redux state
+        setContentReady(true);// Mark content as ready
+      } else {
+        fetchPosts();// Fetch posts from the database if not in state
+      }
+    }
+    else{
+      fetchPosts();
+    }
+    searchParams.delete('updates');
+    setSearchParams(searchParams, { replace: true });
     fecthUser();
   }, []);
+  
 
   // when content is ready, update category active
   // useEffect(() => {
@@ -178,7 +203,8 @@ const Home = () => {
                 {/* <button className='btn' onClick={(ev) => changeTheme(ev)}>
                   {theme === 'dark-theme' ? <IoSunny/> : <IoMoon/>}{theme === 'dark-theme' ? 'Light' : 'Dark'}
                 </button>
-                <button className='btn' onClick={(ev) => goToProfile(ev)}><IoPerson/> Profile</button> */}
+                 */}
+                <button className='btn' onClick={(ev) => goToProfile(ev)}><IoPerson/> Profile</button>
                 <button className='btn' onClick={(ev) => handleLogout(ev)}><IoLogOut/> Log out</button>
             </div>
           </div>

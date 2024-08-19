@@ -158,8 +158,9 @@ const PostItem = (props) => {
         <div className="post-top-row">
           <img
             loading="lazy"
-            src={props.user.profile_pic ? props.user.profile_pic : profilePic}
+            src={props.user.profile_pic?.includes('profilePics') ? props.user.profile_pic : profilePic}
             alt=""
+            aria-hidden={true}
           />
           <div className="profile-info">
             <p>{props.user.username || ""}</p>

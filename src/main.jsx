@@ -1,54 +1,65 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
+import React from "react";
+import ReactDOM from "react-dom/client";
 import {
   createBrowserRouter,
   RouterProvider,
-  Navigate
+  Navigate,
 } from "react-router-dom";
-import './index.scss';
-import Home from './pages/Home/Home.jsx';
-import Login from './pages/Login/Login.jsx';
-import Notifications from './pages/Notifications/Notifications.jsx';
-import Register from './pages/Register/Register.jsx';
-import App from './App.jsx';
-import NewPost from './pages/NewPost/NewPost.jsx';
+import "./index.scss";
+import Home from "./pages/Home/Home.jsx";
+import Login from "./pages/Login/Login.jsx";
+import Notifications from "./pages/Notifications/Notifications.jsx";
+import Register from "./pages/Register/Register.jsx";
+import App from "./App.jsx";
+import NewPost from "./pages/NewPost/NewPost.jsx";
+import { Provider } from "react-redux";
+import store from "./state/store.js";
+import Profile from "./pages/Profile/Profile.jsx";
 
-
-document.body.setAttribute('class', window.localStorage.getItem('theme') || 'dark-theme');
+document.body.setAttribute(
+  "class",
+  window.localStorage.getItem("theme") || "dark-theme"
+);
 
 const router = createBrowserRouter([
   {
     path: "/", // Root path
-    element: <App/>,
+    element: <App />,
     children: [
-      {
-        path: "",
-        element: <Navigate to="login" />, // Redirect from "/" to "/login"
-      },
+      // {
+      //   path: "",
+      //   element: <Navigate to="login" />, // Redirect from "/" to "/login"
+      // },
       {
         path: "home",
-        element: <Home/>,
+        element: <Home />,
+      },
+      {
+        path: "profile",
+        element: <Profile />,
       },
       {
         path: "notifications",
-        element: <Notifications/>,
+        element: <Notifications />,
       },
       {
         path: "new-post",
-        element: <NewPost/>,
+        element: <NewPost />,
       },
       {
         path: "login",
-        element: <Login/>
+        element: <Login />,
       },
       {
         path: "register",
-        element: <Register/>
+        element: <Register />,
       },
-    ]
+    ],
   },
 ]);
 
-ReactDOM.createRoot(document.getElementById('root')).render(
-  <RouterProvider router={router} />
+ReactDOM.createRoot(document.getElementById("root")).render(
+  <Provider store={store}>
+    <RouterProvider router={router} />
+  </Provider>
 );

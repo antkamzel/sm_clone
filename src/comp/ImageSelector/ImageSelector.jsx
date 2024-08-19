@@ -7,7 +7,7 @@ import "./ImageSelector.scss";
 import { IoAdd, IoFileTray, IoFileTrayStacked } from "react-icons/io5";
 import { LuImagePlus } from "react-icons/lu";
 
-const ImageSelector = ({ setImages, limit }) => {
+const ImageSelector = ({ setImages, limit, defaultImg }) => {
   let timeout;
   const timeoutDuration = 150;
 
@@ -28,6 +28,7 @@ const ImageSelector = ({ setImages, limit }) => {
       tooManyFilesPopupRef.current.classList.add("overlay-visible");
       return;
     }
+
 
     changeAspectRatio(files);
 
@@ -63,7 +64,7 @@ const ImageSelector = ({ setImages, limit }) => {
       const img = new Image();
       img.onload = () => {
         const aspectRatio = img.width / img.height;
-        console.log(`Aspect Ratio of the first image: ${aspectRatio}`);
+        // console.log(`Aspect Ratio of the first image: ${aspectRatio}`);
 
         // Get the container width (assuming full width)
         const container = document.querySelector(".choose-image-wrapper");
@@ -122,6 +123,13 @@ const ImageSelector = ({ setImages, limit }) => {
   };
 
   useEffect(() => {
+    // console.log(defaultImg);
+    if(defaultImg){
+      setSelectedImages([defaultImg]);
+    }
+  }, [])
+
+  useEffect(() => {
     try {
       document
         .querySelector('.pagination-item[orderindex="0"]')
@@ -164,7 +172,7 @@ const ImageSelector = ({ setImages, limit }) => {
                 <SwiperSlide key={index} orderindex={index}>
                   <img
                     key={index}
-                    src={URL.createObjectURL(image)}
+                    src={typeof(image) !== 'string' ?  URL.createObjectURL(image) : image}
                     alt={"image slide number " + index}
                   />
                 </SwiperSlide>

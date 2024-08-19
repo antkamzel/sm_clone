@@ -298,10 +298,10 @@ input {
   font-size: 12px;
 }
 
-.creds-input input:-webkit-autofill,
-.creds-input input:-webkit-autofill:hover,
-.creds-input input:-webkit-autofill:focus,
-.creds-input input:-webkit-autofill:active {
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
   -webkit-box-shadow: 0 0 0 30px var(--primary-shade-2) inset !important;
   -webkit-text-fill-color: white;
 }
