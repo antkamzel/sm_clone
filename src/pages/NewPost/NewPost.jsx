@@ -9,6 +9,9 @@ import PopupOverlay from "../../comp/PopupOverlay/PopupOverlay";
 import LoaderWrapper from "../../comp/LoaderWrapper/LoaderWrapper";
 import { MdFileUpload } from "react-icons/md";
 import { v4 } from "uuid";
+import { useDispatch, useSelector } from "react-redux";
+import { addPost } from "../../state/posts/postsStore";
+
 
 const NewPost = () => {
   const durationOptions = [
@@ -26,7 +29,12 @@ const NewPost = () => {
     },
   ];
 
+  const stateposts = useSelector((state) => state.posts.posts);
+  const stateauthuser = useSelector((state) => state.authuser.authuser);
+
   const loadingOverlayRef = useRef();
+  const dispatch = useDispatch();
+
 
   const [postFields, setPostFields] = useState({
     images: [],
@@ -43,9 +51,6 @@ const NewPost = () => {
   const [roomTypesOptions, setRoomTypesOptions] = useState(null);
   const [contentReady, setContentReady] = useState(false);
   const [allowUpload, setAllowUpload] = useState(false);
-
-  // const [activeComplexity, setActiveComplexity] = useState(null);
-  // const [activeRoomType, setActiveRoomType] = useState(null);
 
   const nav = useNavigate();
 
@@ -162,8 +167,6 @@ const NewPost = () => {
       })
     );
 
-    const userResp = await supabase.auth.getUser();
-
     const uploadResp = await supabase
       .from("posts")
       .insert({
@@ -174,7 +177,7 @@ const NewPost = () => {
         image4: imagesURL[3] || null,
         room_type: postFields.roomType.id,
         complexity: postFields.complexity.id,
-        user: userResp.data.user.id,
+        user: stateauthuser.id,
       })
       .select("id");
     if (uploadResp.error) {
@@ -194,6 +197,15 @@ const NewPost = () => {
       title: null,
     }));
     loadingOverlayRef.current.classList.remove("overlay-visible");
+
+    const resp = await supabase
+      .from("posts")
+      .select("*, room_types(type), complexity(name), users(*), duration(*), likes(*), comments(*)")
+      .eq('id', newPostID).single();
+    
+      if(!resp.error){
+        dispatch(addPost(resp.data));
+      }
     nav("/home", { replace: true });
   };
   //

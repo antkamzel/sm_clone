@@ -15,6 +15,7 @@ import NewPost from "./pages/NewPost/NewPost.jsx";
 import { Provider } from "react-redux";
 import store from "./state/store.js";
 import Profile from "./pages/Profile/Profile.jsx";
+import Posts from "./pages/Posts/Posts.jsx";
 
 document.body.setAttribute(
   "class",
@@ -37,6 +38,10 @@ const router = createBrowserRouter([
       {
         path: "profile",
         element: <Profile />,
+      },
+      {
+        path: "posts/:id",
+        element: <Posts />,
       },
       {
         path: "notifications",

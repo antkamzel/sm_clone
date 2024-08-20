@@ -1,10 +1,14 @@
 import React, { useEffect } from 'react';
 import { Outlet, useNavigate, useLocation } from 'react-router-dom';
 import { supabase } from './clients/SupabaseClient';
+import { setUser } from './state/auth/userAuthStore';
+import { useDispatch } from 'react-redux';
+
 
 const App = () => {
   const nav = useNavigate();
   const location = useLocation();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     checkUser();
@@ -17,9 +21,16 @@ const App = () => {
     const publicPaths = ["/login", "/register", "/"]; // Paths that don't require authentication
     const currentPath = location.pathname;
 
+    if(userIsAuthenticated){
+      const userresp = await supabase.from('users').select().eq('id', resp.data.session.user.id).single();
+      let useritem = {...userresp.data, ...resp.data.session.user};
+      dispatch(setUser(useritem));
+    }
+
     if (!userIsAuthenticated && !publicPaths.includes(currentPath)) {
       nav('/login', { replace: true });
     } else if (userIsAuthenticated && publicPaths.includes(currentPath)) {
+      
       nav('/home', { replace: true });
     }
   };

@@ -5,9 +5,12 @@ import { supabase } from "../../clients/SupabaseClient";
 import { IoClose } from "react-icons/io5";
 import PopupOverlay from "../../comp/PopupOverlay/PopupOverlay";
 import LoaderDots from "../../comp/LoaderDots/LoaderDots";
+import { setUser } from '../../state/auth/userAuthStore';
+import { useDispatch } from "react-redux";
 
 const Login = () => {
   const wrongCredentialsPopupRef = useRef();
+  const dispatch = useDispatch();
 
   const nav = useNavigate();
 
@@ -26,6 +29,11 @@ const Login = () => {
     });
     setIsLogging(false);
     if (resp.data.user) {
+      const resp2 = await supabase.from('users').select().eq('id', resp.data.user.id).single();
+      if(!resp.error){
+        let useritem = {...resp2.data, ...resp.data.user};
+        dispatch(setUser(useritem));
+      }
       nav("/home", { replace: true });
       return;
     }
