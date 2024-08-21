@@ -77,7 +77,7 @@ const PostItem = forwardRef((props, ref) => {
     }
 
     if(!resp.error){
-      console.log('download new item');
+      // console.log('download new item');
       const resp2 = await supabase.from("posts").select('*, likes(*)').eq('id', props.postprop.id).single();
       if(!resp2.error){
         dispatch(updatePost(resp2.data));
