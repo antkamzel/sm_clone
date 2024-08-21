@@ -10,24 +10,24 @@ import LoaderWrapper from "../../comp/LoaderWrapper/LoaderWrapper";
 import { MdFileUpload } from "react-icons/md";
 import { v4 } from "uuid";
 import { useDispatch, useSelector } from "react-redux";
-import { addPost } from "../../state/posts/postsStore";
+import { addPost } from "../../state/posts/postsSlice";
 
 
 const NewPost = () => {
-  const durationOptions = [
-    {
-      fullName: "Minutes",
-      name: "min",
-    },
-    {
-      fullName: "Hours",
-      name: "h",
-    },
-    {
-      fullName: "Days",
-      name: "d",
-    },
-  ];
+  // const durationOptions = [
+  //   {
+  //     fullName: "Minutes",
+  //     name: "min",
+  //   },
+  //   {
+  //     fullName: "Hours",
+  //     name: "h",
+  //   },
+  //   {
+  //     fullName: "Days",
+  //     name: "d",
+  //   },
+  // ];
 
   const stateposts = useSelector((state) => state.posts.posts);
   const stateauthuser = useSelector((state) => state.authuser.authuser);
@@ -39,16 +39,16 @@ const NewPost = () => {
   const [postFields, setPostFields] = useState({
     images: [],
     title: null,
-    roomType: null,
-    complexity: null,
-    duration: {
-      from: null,
-      to: null,
-      type: null,
-    },
+    // roomType: null,
+    // complexity: null,
+    // duration: {
+    //   from: null,
+    //   to: null,
+    //   type: null,
+    // },
   });
-  const [complexOptions, setComplexOptions] = useState(null);
-  const [roomTypesOptions, setRoomTypesOptions] = useState(null);
+  // const [complexOptions, setComplexOptions] = useState(null);
+  // const [roomTypesOptions, setRoomTypesOptions] = useState(null);
   const [contentReady, setContentReady] = useState(false);
   const [allowUpload, setAllowUpload] = useState(false);
 
@@ -68,29 +68,29 @@ const NewPost = () => {
     }));
   };
 
-  const handleRoomTypeChange = (data) => {
-    setPostFields((prevState) => ({
-      ...prevState,
-      roomType: data[0],
-    }));
-  };
+  // const handleRoomTypeChange = (data) => {
+  //   setPostFields((prevState) => ({
+  //     ...prevState,
+  //     roomType: data[0],
+  //   }));
+  // };
 
-  const handleComplexityChange = (data) => {
-    setPostFields((prevState) => ({
-      ...prevState,
-      complexity: data[0],
-    }));
-  };
+  // const handleComplexityChange = (data) => {
+  //   setPostFields((prevState) => ({
+  //     ...prevState,
+  //     complexity: data[0],
+  //   }));
+  // };
 
-  const handleFromChange = (ev) => {
-    setPostFields((prevState) => ({
-      ...prevState,
-      duration: {
-        ...prevState.duration,
-        from: ev.target.value,
-      },
-    }));
-  };
+  // const handleFromChange = (ev) => {
+  //   setPostFields((prevState) => ({
+  //     ...prevState,
+  //     duration: {
+  //       ...prevState.duration,
+  //       from: ev.target.value,
+  //     },
+  //   }));
+  // };
 
   const handleToChange = (ev) => {
     setPostFields((prevState) => ({
@@ -119,12 +119,12 @@ const NewPost = () => {
     // Check if all fields have content
     if (
       images.length > 0 &&
-      title !== null &&
-      roomType !== null &&
-      complexity !== null &&
-      duration.from !== null &&
-      duration.to !== null &&
-      duration.type !== null
+      title !== null
+      // roomType !== null &&
+      // complexity !== null &&
+      // duration.from !== null &&
+      // duration.to !== null &&
+      // duration.type !== null
     ) {
       return true;
     } else {
@@ -133,18 +133,18 @@ const NewPost = () => {
   };
 
   // async functions
-  const fetchComplexity = async () => {
-    const respComplex = await supabase.from("complexity").select();
-    if (respComplex.data.length > 0) {
-      setComplexOptions(respComplex.data);
-    }
-  };
-  const fetchRoomTypes = async () => {
-    const respRoomTypes = await supabase.from("room_types").select();
-    if (respRoomTypes.data.length > 0) {
-      setRoomTypesOptions(respRoomTypes.data);
-    }
-  };
+  // const fetchComplexity = async () => {
+  //   const respComplex = await supabase.from("complexity").select();
+  //   if (respComplex.data.length > 0) {
+  //     setComplexOptions(respComplex.data);
+  //   }
+  // };
+  // const fetchRoomTypes = async () => {
+  //   const respRoomTypes = await supabase.from("room_types").select();
+  //   if (respRoomTypes.data.length > 0) {
+  //     setRoomTypesOptions(respRoomTypes.data);
+  //   }
+  // };
 
   const uploadPost = async () => {
     loadingOverlayRef.current.classList.add("overlay-visible");
@@ -175,8 +175,8 @@ const NewPost = () => {
         image2: imagesURL[1] || null,
         image3: imagesURL[2] || null,
         image4: imagesURL[3] || null,
-        room_type: postFields.roomType.id,
-        complexity: postFields.complexity.id,
+        // room_type: postFields.roomType.id,
+        // complexity: postFields.complexity.id,
         user: stateauthuser.id,
       })
       .select("id");
@@ -185,12 +185,12 @@ const NewPost = () => {
     }
     const newPostID = uploadResp.data[0].id;
 
-    await supabase.from("duration").insert({
-      type: postFields.duration.type,
-      from: postFields.duration.from,
-      to: postFields.duration.to,
-      post: newPostID,
-    });
+    // await supabase.from("duration").insert({
+    //   type: postFields.duration.type,
+    //   from: postFields.duration.from,
+    //   to: postFields.duration.to,
+    //   post: newPostID,
+    // });
 
     setPostFields((prevState) => ({
       ...prevState,
@@ -198,9 +198,13 @@ const NewPost = () => {
     }));
     loadingOverlayRef.current.classList.remove("overlay-visible");
 
+    // const resp = await supabase
+    //   .from("posts")
+    //   .select("*, room_types(type), complexity(name), users(*), duration(*), likes(*), comments(*)")
+    //   .eq('id', newPostID).single();
     const resp = await supabase
       .from("posts")
-      .select("*, room_types(type), complexity(name), users(*), duration(*), likes(*), comments(*)")
+      .select("*, users(*), likes(*), comments(*)")
       .eq('id', newPostID).single();
     
       if(!resp.error){
@@ -210,15 +214,16 @@ const NewPost = () => {
   };
   //
 
-  const waitForInit = async () => {
-    await fetchComplexity();
-    await fetchRoomTypes();
-    setContentReady(true);
-  };
+  // const waitForInit = async () => {
+  //   // await fetchComplexity();
+  //   // await fetchRoomTypes();
+  //   setContentReady(true);
+  // };
 
   // init
   useEffect(() => {
-    waitForInit();
+    // waitForInit();
+    setContentReady(true);
   }, []);
 
   useEffect(() => {
@@ -260,7 +265,7 @@ const NewPost = () => {
                   onChange={handleTitleChange}
                 />
               </div>
-              {complexOptions && (
+              {/* {complexOptions && (
                 <div className="input-wrapper">
                   <label htmlFor="complexInput">Complexity</label>
                   <Select
@@ -272,8 +277,8 @@ const NewPost = () => {
                     onChange={handleComplexityChange}
                   />
                 </div>
-              )}
-              {roomTypesOptions && (
+              )} */}
+              {/* {roomTypesOptions && (
                 <div className="input-wrapper">
                   <label htmlFor="complexInput">Room type</label>
                   <Select
@@ -285,8 +290,8 @@ const NewPost = () => {
                     onChange={handleRoomTypeChange}
                   />
                 </div>
-              )}
-              <div className="input-wrapper">
+              )} */}
+              {/* <div className="input-wrapper">
                 <label htmlFor="complexInput">Duration (Est.)</label>
                 <Select
                   searchable={false}
@@ -310,7 +315,7 @@ const NewPost = () => {
                     <input id="dto" type="number" onChange={handleToChange} />
                   </div>
                 </div>
-              </div>
+              </div> */}
             </div>
           </div>
         ) : (

@@ -13,6 +13,8 @@ import ImageSelector from "../../comp/ImageSelector/ImageSelector";
 import { v4 } from "uuid";
 import PopupOverlay from "../../comp/PopupOverlay/PopupOverlay";
 import { useDispatch, useSelector } from "react-redux";
+import { updateAuthUserField, setUser } from "../../state/auth/userAuthSlice";
+import { updatePostUserField } from "../../state/posts/postsSlice";
 
 const Profile = () => {
   const nav = useNavigate();
@@ -70,7 +72,7 @@ const Profile = () => {
       }
     }
 
-    setUser(userInfo);
+    setLocalUser(userInfo);
     setOldCreds(userInfo);
     fetchPosts(userInfo.id);
   };
@@ -103,7 +105,7 @@ const Profile = () => {
   };
 
   const profilePicHandle = (file) => {
-    setUser((prevState) => ({
+    setLocalUser((prevState) => ({
       ...prevState,
       profile_pic: file[0],
     }));
@@ -112,18 +114,22 @@ const Profile = () => {
   const editFields = async () => {
     let temp = canEdit;
     if (temp === true) {
-      const { data, error } = await supabase.auth.updateUser({
-        email: user.email,
-      });
-      if (!error) {
-        updateInfo();
-      }
+      updateInfo();
+      // with email change
+      // const { data, error } = await supabase.auth.updateUser({
+      //   email: stateauthuser.email,
+      // });
+      // if (!error) {
+      //   updateInfo();
+      // }
     }
     credsContainerRef.current.classList.toggle("disabled");
     setCanEdit(!temp);
   };
 
   const updateInfo = async () => {
+    let updatedInfo = { ...localUser };
+    // delete old file from storage bucket in supabase
     try {
       const oldfilename = oldCreds.profile_pic.split("/").pop();
       const { data, error } = await supabase.storage
@@ -136,65 +142,104 @@ const Profile = () => {
     const fileName = `profile-${v4() + Date.now()}.png`;
     let imageresp;
     try {
-      const resp1 = await supabase.storage
-        .from("profilePics")
-        .upload(fileName, user.profile_pic);
-      // get url to
-      imageresp = supabase.storage
-        .from("profilePics")
-        .getPublicUrl(resp1.data.path);
+      if (localUser.profile_pic instanceof File) {
+        const resp1 = await supabase.storage
+          .from("profilePics")
+          .upload(fileName, localUser.profile_pic);
+        imageresp = supabase.storage
+          .from("profilePics")
+          .getPublicUrl(resp1.data.path);
+      }
+      else{
+        imageresp = localUser.profile_pic;
+      }
     } catch (err) {
       console.log(err);
     }
     const { resp, error2 } = await supabase
       .from("users")
       .update({
-        username: user.username,
-        email: user.email,
-        profile_pic: imageresp.data.publicUrl,
+        username: updatedInfo.username,
+        email: updatedInfo.email,
+        profile_pic: localUser.profile_pic instanceof File ? imageresp.data.publicUrl: imageresp
       })
-      .eq("id", user.id);
+      .eq("id", stateauthuser.id);
 
     if (!error2) {
-      setOldCreds((prevState) => ({
-        ...prevState,
-        username: user.username,
-        email: user.email,
-        profile_pic: imageresp.data.publicUrl,
-      }));
-
-      setHasUpdates(true);
+      updatedInfo.profile_pic = localUser.profile_pic instanceof File ? imageresp.data.publicUrl: imageresp;
+      setLocalUser(updatedInfo);
+      setOldCreds(updatedInfo);
       console.log("updated");
+      dispatch(setUser(updatedInfo));
     }
   };
 
   const checkUser = async () => {
+    // will check to see if logged user is the same as profile user
+    // (to allow editing)
+    const resp = await supabase
+      .from("users")
+      .select("*")
+      .eq("id", searchParams.get("id"))
+      .single();
+    setLocalUser(resp.data);
+    setOldCreds(resp.data);
     if (stateauthuser && Object.keys(stateauthuser).length > 0) {
-      const resp = await supabase .from("users").select("*").eq("id", searchParams.get("id")).single();
       if (!resp.error && resp.data.id === stateauthuser.id) {
         setIsLoggedUser(true);
       }
-      setLocalUser(stateauthuser);
+    }
+  };
+
+  const checkPosts = async () => {
+    if (stateposts && stateposts.length > 0) {
+      const userposts = stateposts.filter(
+        (el) => el.user === searchParams.get("id")
+      );
+      userposts.sort((a, b) => {
+        return new Date(b.created_at) - new Date(a.created_at);
+      });
+      if (searchParams.get("id") === stateauthuser.id) {
+        userposts.forEach((element) => {
+          const { id, username, email, profile_pic, created_at } =
+            stateauthuser;
+          const payload = {
+            id,
+            username,
+            email,
+            profile_pic,
+            created_at,
+            postid: element.id,
+          };
+          dispatch(updatePostUserField({ field: "users", value: payload }));
+        });
+      }
+      setUserPosts(userposts);
+    } else {
+      const resp = await supabase
+        .from("posts")
+        .select("*,room_types(type), complexity(name), users(*), duration(*)")
+        .eq("user", searchParams.get("id"));
+      if (resp.data) {
+        resp.data.sort((a, b) => {
+          return new Date(b.created_at) - new Date(a.created_at);
+        });
+        setUserPosts(resp.data);
+      }
     }
   };
 
   useEffect(() => {
     checkUser();
+    checkPosts();
   }, [stateauthuser]);
-
-  useEffect(() => {
-    if(stateposts){
-      const userposts = stateposts.filter(el => el.user === stateauthuser.id)
-      setUserPosts(userposts);
-    }
-  }, [stateposts]);
 
   return (
     <div className="container-small">
       <div className="profile">
         <header>
           <button
-            className="back-btn btnr"
+            className="back-btn btnr ico-only"
             onClick={() => {
               if (hasUpdates) {
                 nav(`/home?updates=true`);
@@ -207,7 +252,7 @@ const Profile = () => {
           </button>
           <h1>Your profile</h1>
           {isLoggedUser && (
-            <button className="edit-btn btnr" onClick={editFields}>
+            <button className="edit-btn btnr ico-only" onClick={editFields}>
               {canEdit ? <FaSave /> : <MdEdit />}
             </button>
           )}
@@ -227,14 +272,14 @@ const Profile = () => {
                     className="username-in"
                     value={localUser.username}
                     onInput={(ev) => {
-                      setUser((prevState) => ({
+                      setLocalUser((prevState) => ({
                         ...prevState, // Spread the previous state
                         username: ev.target.value,
                       }));
                     }}
                   />
                 </div>
-                {isLoggedUser && (
+                {/* {isLoggedUser && (
                   <div className="bottom">
                     <div className="input-wrapper">
                       <label htmlFor="email-input">Email</label>
@@ -251,7 +296,7 @@ const Profile = () => {
                       />
                     </div>
                   </div>
-                )}
+                )} */}
               </div>
             ) : (
               <div className="creds-container">

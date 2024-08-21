@@ -17,23 +17,28 @@ import "./PostItem.scss";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination, Scrollbar, A11y } from "swiper/modules";
 import { supabase } from "../../clients/SupabaseClient";
-import { useDispatch } from "react-redux";
-import { updatePost } from '../../state/posts/postsStore';
+import { useDispatch, useSelector } from "react-redux";
+import { updatePost } from '../../state/posts/postsSlice';
+import { useNavigate } from "react-router-dom";
 
 
 const PostItem = forwardRef((props, ref) => {
+
+  const stateauthuser = useSelector((state) => state.authuser.authuser);
+  const stateposts = useSelector((state) => state.posts.posts);
+
   const dispatch = useDispatch();
+  const nav = useNavigate();
 
   const swiperRef = useRef(null);
   // states
   const [images, setImages] = useState(null);
+  const [localData, setLocalData] = useState(null);
 
   const [isLiked, setIsLiked] = useState(false);
   const [contentReady, setContentReady] = useState(false);
-  const [likesCounter, setLikesCounter] = useState(props.postprop.likes.length || 0);
-  const [commentsCounter, setCommentsCounter] = useState(
-    props.postprop.comments.length || 0
-  );
+  const [likesCounter, setLikesCounter] = useState(0);
+  const [commentsCounter, setCommentsCounter] = useState(0);
   // ------------end of states
 
   // functions
@@ -156,8 +161,6 @@ const PostItem = forwardRef((props, ref) => {
     setLikesCounter(props.postprop.likes.length);
     setCommentsCounter(props.postprop.comments.length);
 
-    // setIsLiked(false);
-
     props.postprop.likes.forEach((likeelement) => {
       if (likeelement.user === props.auth_user.id) {
         setIsLiked(true);
@@ -165,12 +168,20 @@ const PostItem = forwardRef((props, ref) => {
     });
 
     handleImageLoading(filteredImages);
+
+    setLocalData(props.postprop)
   }, []);
+
+  // useEffect(() => {
+
+  // }, [stateauthuser])
 
   return (
     <>
       <div className="post-item" id={props.postprop.id} ref={ref}>
-        <div className="post-top-row">
+        <div className="post-top-row" onClick={() => {
+          nav(`/profile?id=${props.postprop.user}`)
+        }}>
           <img
             loading="lazy"
             src={props.postprop.users.profile_pic?.includes('profilePics') ? props.postprop.users.profile_pic : profilePic}
@@ -205,7 +216,7 @@ const PostItem = forwardRef((props, ref) => {
             </Swiper>
           ) : <div className="image-skeleton"></div>}
         </div>
-        <div className="post-info">
+        {/* <div className="post-info">
           <span className="room_type-txt">
             <IoDesktopOutline /> {props.postprop.room_types.type}
           </span>
@@ -217,7 +228,7 @@ const PostItem = forwardRef((props, ref) => {
             {props.postprop.duration[0].type} - {props.postprop.duration[0].to}
             {props.postprop.duration[0].type}
           </span>
-        </div>
+        </div> */}
         <div className="post-title">
           <h3>{props.postprop.title}</h3>
         </div>

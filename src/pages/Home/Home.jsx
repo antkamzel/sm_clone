@@ -14,8 +14,8 @@ import PostItem from "../../comp/PostItem/PostItem";
 import NewPostBtn from "../../comp/NewPostBtn/NewPostBtn";
 import LoaderWrapper from "../../comp/LoaderWrapper/LoaderWrapper";
 import { useSelector, useDispatch } from "react-redux";
-import { setPosts, clearPosts } from "../../state/posts/postsStore";
-import { setUser } from "../../state/auth/userAuthStore";
+import { setPosts, clearPosts } from "../../state/posts/postsSlice";
+import { clearUser } from "../../state/auth/userAuthSlice";
 
 const Home = () => {
   // Get the search parameters from the URL
@@ -70,7 +70,7 @@ const Home = () => {
     }
     setTimeout(() => {
       setAllPosts(orderedPosts);
-    }, 5);
+    }, 20);
   };
 
   const toggleProfilePopup = (e) => {
@@ -94,13 +94,14 @@ const Home = () => {
     ev.stopPropagation();
     await supabase.auth.signOut();
     dispatch(clearPosts());
+    dispatch(clearUser());
     nav("/login", { replace: true });
   };
 
   const fetchPosts = async () => {
     const resp = await supabase
       .from("posts")
-      .select("*, room_types(type), complexity(name), users(*), duration(*)");
+      .select("*, users(*)");
 
     await Promise.all(
       resp.data.map(async (post) => {
@@ -156,38 +157,33 @@ const Home = () => {
 
   // use effects
   useEffect(() => {
-    // Check if 'updates' parameter is set to 'true'
-    const updates = searchParams.get("updates") === "true";
-
-    // if there is/is not an updates paramter
-    if (!updates) {
-      if (stateposts.length > 0) {
-        setAllPosts(stateposts); // Use the posts from Redux state
-        setContentReady(true); // Mark content as ready
-      } else {
-        fetchPosts(); // Fetch posts from the database if not in state
-      }
-    } else {
+    if (!stateposts || stateposts.length === 0) {
       fetchPosts();
+    } else {
+      setAllPosts(stateposts);
+      setContentReady(true);
     }
-    searchParams.delete("updates");
-    setSearchParams(searchParams, { replace: true });
+    // Check if 'updates' parameter is set to 'true'
+    // const updates = searchParams.get("updates") === "true";
 
-    // fecthUser();
-
-    
-    // categoriesBtnsRef.current.forEach((buttonRef, i) => {
-    //   if (i === index) {
-    //     buttonRef.classList.add("is-selected");
+    // // if there is/is not an updates paramter
+    // if (!updates) {
+    //   if (stateposts.length > 0) {
+    //     setAllPosts(stateposts); // Use the posts from Redux state
+    //     setContentReady(true); // Mark content as ready
     //   } else {
-    //     buttonRef.classList.remove("is-selected");
+    //     fetchPosts(); // Fetch posts from the database if not in state
     //   }
-    // });
+    // } else {
+    //   fetchPosts();
+    // }
+    // searchParams.delete("updates");
+    // setSearchParams(searchParams, { replace: true });
   }, []);
 
   useEffect(() => {
-    if(categoriesBtnsRef.current.length > 0){
-      const index = window.localStorage.getItem('home-active-category');
+    if (categoriesBtnsRef.current.length > 0) {
+      const index = window.localStorage.getItem("home-active-category");
       categoriesBtnsRef.current.forEach((buttonRef, i) => {
         if (i === JSON.parse(index)) {
           buttonRef.classList.add("is-selected");
@@ -196,7 +192,7 @@ const Home = () => {
         }
       });
     }
-  }, [allPosts])
+  }, [allPosts]);
 
   useEffect(() => {
     setLocalUser({
@@ -209,19 +205,17 @@ const Home = () => {
 
   useEffect(() => {
     const temp = [...stateposts];
-    if(window.localStorage.getItem('home-active-category') === '0'){
+    if (window.localStorage.getItem("home-active-category") === "0") {
       temp.sort((a, b) => {
         return new Date(b.created_at) - new Date(a.created_at);
       });
-    }
-    else{
+    } else {
       temp.sort((a, b) => {
         return b.likes.length - a.likes.length;
       });
     }
     setAllPosts(temp);
-  }, [stateposts])
-
+  }, [stateposts]);
 
   return (
     <div className="container-small">
@@ -289,7 +283,7 @@ const Home = () => {
                   return (
                     <PostItem
                       key={index}
-                      auth_user={localUser}
+                      auth_user={stateauthuser}
                       postprop={element}
                     />
                   );

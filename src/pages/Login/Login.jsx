@@ -5,11 +5,14 @@ import { supabase } from "../../clients/SupabaseClient";
 import { IoClose } from "react-icons/io5";
 import PopupOverlay from "../../comp/PopupOverlay/PopupOverlay";
 import LoaderDots from "../../comp/LoaderDots/LoaderDots";
-import { setUser } from '../../state/auth/userAuthStore';
+import { setUser } from '../../state/auth/userAuthSlice';
 import { useDispatch } from "react-redux";
+import { FaInfo } from "react-icons/fa";
 
 const Login = () => {
   const wrongCredentialsPopupRef = useRef();
+  const disclaimerRef = useRef();
+
   const dispatch = useDispatch();
 
   const nav = useNavigate();
@@ -45,6 +48,11 @@ const Login = () => {
       <div className="login">
         <div className="login-intro">
           <h2>Welcome to this demo app</h2>
+          <button className="disclaimer" onClick={() => {
+                disclaimerRef.current.classList.add("overlay-visible");
+          }}>
+            <FaInfo/>
+          </button>
         </div>
         <div className="login-form">
           <h2 className="title">Log in</h2>
@@ -85,6 +93,12 @@ const Login = () => {
           popupTexts={[
             "A user with the credentials you provided does not exist!",
           ]}
+        />
+
+        <PopupOverlay
+          ref={disclaimerRef}
+          popupTitle={'Disclaimer'}
+          popupTexts={['This is a demo app. Email and password do not have to be real. For testing purposes you can just add an email like mail@mail.com etc']}
         />
       </div>
     </div>

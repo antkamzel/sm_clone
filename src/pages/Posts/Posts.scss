@@ -1,0 +1,23 @@
+.posts-page header {
+  height: 80px;
+  background: var(--primary-shade-2);
+  display: flex;
+  align-items: center;
+  padding: var(--spacing-5) var(--spacing-4);
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  gap: var(--spacing-4);
+  margin-bottom: var(--spacing-5);
+}
+
+.posts-page .posts-container{
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4);
+}
+
+
+.posts-page header h1 {
+  font-size: var(--fs-5);
+}
