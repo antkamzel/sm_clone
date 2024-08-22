@@ -77,15 +77,30 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--spacing-5);
+  gap: var(--spacing-6);
   margin-top: var(--spacing-7);
   width: 100%;
 }
 
+
 .profile .creds-container .top .username-in {
-  font-size: var(--fs-4);
+  font-size: var(--fs-5);
   text-align: center;
   letter-spacing: 1px;
+}
+
+.profile .creds-container .top .follow-btn{
+  background: transparent;
+  padding: var(--spacing-1) var(--spacing-5);
+  border: 1px solid var(--primary-shade-3);
+  font-size: var(--fs-2);
+  border-radius: var(--br-0);
+  letter-spacing: 1px;
+  pointer-events: all !important;
+}
+.profile .creds-container .top .follow-btn.following{
+  background: var(--primary-shade-2);
+  border-color: var(--primary-shade-2);
 }
 
 .profile .creds-container .bottom {
@@ -204,6 +219,11 @@
   width: 120px;
   height: 120px;
   border-radius: 50%;
+}
+.profile .creds-container .follskeleton {
+  margin-top: var(--spacing-2);
+  width: min(200px, 70%);
+  height: 30px;
 }
 .profile .creds-container .unskeleton {
   margin-top: var(--spacing-2);

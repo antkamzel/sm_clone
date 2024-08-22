@@ -1,10 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import "./Profile.scss";
-import {
-  useNavigate,
-  useLocation,
-  useSearchParams
-} from "react-router-dom";
+import { useNavigate, useLocation, useSearchParams } from "react-router-dom";
 import { FaChevronLeft, FaSave } from "react-icons/fa";
 import { MdEdit } from "react-icons/md";
 import { supabase } from "../../clients/SupabaseClient";
@@ -32,75 +28,76 @@ const Profile = () => {
 
   const [localUser, setLocalUser] = useState();
   const [canEdit, setCanEdit] = useState(false);
+  const [isFollowing, setIsFollowing] = useState(false);
 
-  const fetchUser = async () => {
-    const { data, error } = await supabase.auth.getUser();
-    if (error) {
-      // Navigate to home if there's an error
-      nav("/home", { replace: true });
-      return; // Exit the function
-    }
+  // const fetchUser = async () => {
+  //   const { data, error } = await supabase.auth.getUser();
+  //   if (error) {
+  //     // Navigate to home if there's an error
+  //     nav("/home", { replace: true });
+  //     return; // Exit the function
+  //   }
 
-    let userInfo = data.user;
+  //   let userInfo = data.user;
 
-    // Fetch user profile picture and username
-    const { data: userData, error: fetchError } = await supabase
-      .from("users")
-      .select("username, profile_pic")
-      .eq("id", userInfo.id)
-      .single(); // Use .single() if you expect only one result
+  //   // Fetch user profile picture and username
+  //   const { data: userData, error: fetchError } = await supabase
+  //     .from("users")
+  //     .select("username, profile_pic")
+  //     .eq("id", userInfo.id)
+  //     .single(); // Use .single() if you expect only one result
 
-    if (fetchError) {
-      // Handle the error (optional)
-      console.error(fetchError);
-      return;
-    }
+  //   if (fetchError) {
+  //     // Handle the error (optional)
+  //     console.error(fetchError);
+  //     return;
+  //   }
 
-    userInfo = {
-      ...userInfo,
-      profile_pic: userData?.profile_pic,
-      username: userData?.username,
-    };
+  //   userInfo = {
+  //     ...userInfo,
+  //     profile_pic: userData?.profile_pic,
+  //     username: userData?.username,
+  //   };
 
-    //check if user is the same as logged user
-    if (searchParams.get("id")) {
-      const id = searchParams.get("id");
-      if (id === userInfo.id) {
-        setIsLoggedUser(true);
-      }
-    }
+  //   //check if user is the same as logged user
+  //   if (searchParams.get("id")) {
+  //     const id = searchParams.get("id");
+  //     if (id === userInfo.id) {
+  //       setIsLoggedUser(true);
+  //     }
+  //   }
 
-    setLocalUser(userInfo);
-    setOldCreds(userInfo);
-    fetchPosts(userInfo.id);
-  };
+  //   setLocalUser(userInfo);
+  //   setOldCreds(userInfo);
+  //   fetchPosts(userInfo.id);
+  // };
 
-  const fetchPosts = async (userid) => {
-    const resp = await supabase
-      .from("posts")
-      .select("*, room_types(type), complexity(name), users(*), duration(*)")
-      .eq("user", userid);
+  // const fetchPosts = async (userid) => {
+  //   const resp = await supabase
+  //     .from("posts")
+  //     .select("*, room_types(type), complexity(name), users(*), duration(*)")
+  //     .eq("user", userid);
 
-    await Promise.all(
-      resp.data.map(async (post) => {
-        const likesresp = await supabase
-          .from("likes")
-          .select()
-          .eq("post", post.id);
-        const commentsresp = await supabase
-          .from("comments")
-          .select()
-          .eq("post", post.id);
-        post.likes = likesresp.data;
-        post.comments = commentsresp.data;
-      })
-    );
+  //   await Promise.all(
+  //     resp.data.map(async (post) => {
+  //       const likesresp = await supabase
+  //         .from("likes")
+  //         .select()
+  //         .eq("post", post.id);
+  //       const commentsresp = await supabase
+  //         .from("comments")
+  //         .select()
+  //         .eq("post", post.id);
+  //       post.likes = likesresp.data;
+  //       post.comments = commentsresp.data;
+  //     })
+  //   );
 
-    resp.data.sort((a, b) => {
-      return new Date(b.created_at) - new Date(a.created_at);
-    });
-    setUserPosts(resp.data);
-  };
+  //   resp.data.sort((a, b) => {
+  //     return new Date(b.created_at) - new Date(a.created_at);
+  //   });
+  //   setUserPosts(resp.data);
+  // };
 
   const profilePicHandle = (file) => {
     setLocalUser((prevState) => ({
@@ -123,6 +120,33 @@ const Profile = () => {
     }
     credsContainerRef.current.classList.toggle("disabled");
     setCanEdit(!temp);
+  };
+
+  const checkFollowing = async () => {
+      if(stateauthuser.id && !isLoggedUser){
+        const resp = await supabase.from('follows').select().eq('user_following', stateauthuser.id).eq('user_followed', searchParams.get('id')).single();
+        if(resp.error || !resp.data) return;
+        setIsFollowing(true);
+      }
+  };
+
+  const handleFollow = async () => {
+    const temp = isFollowing;
+    setIsFollowing(!temp);
+    if(temp){
+      // will unfollow
+      const resp1 = await supabase.from('follows').select().eq('user_following', stateauthuser.id).eq('user_followed', searchParams.get('id')).single();
+      if(resp1.error || !resp1.data) return;
+      const resp2 = await supabase.from('follows').delete().eq('id', resp1.data.id);
+    }
+    else{
+      const resp = await supabase.from('follows').insert({
+        user_following: stateauthuser.id,
+        user_followed: searchParams.get('id')
+      });
+    }
+    
+
   };
 
   const updateInfo = async () => {
@@ -253,7 +277,12 @@ const Profile = () => {
   useEffect(() => {
     checkUser();
     checkPosts();
+    checkFollowing();
   }, [stateauthuser]);
+
+  // useEffect(() => {
+  //   checkFollowing();
+  // }, []);
 
   return (
     <div className="container-small">
@@ -288,6 +317,16 @@ const Profile = () => {
                     limit={1}
                     defaultImg={localUser.profile_pic}
                   />
+                  {!isLoggedUser && (
+                    <button
+                      className={`follow-btn ${
+                        isFollowing ? "following" : null
+                      }`}
+                      onClick={handleFollow}
+                    >
+                      {isFollowing ? "Following" : "Follow"}
+                    </button>
+                  )}
                   <input
                     type="text"
                     className="username-in"
@@ -323,6 +362,7 @@ const Profile = () => {
               <div className="creds-container">
                 <div className="top">
                   <span className="imgskeleton pr-skeleton"></span>
+                  <span className="follskeleton pr-skeleton"></span>
                   <span className="unskeleton pr-skeleton"></span>
                 </div>
               </div>
@@ -332,7 +372,6 @@ const Profile = () => {
               {userPosts ? (
                 <div className="posts-grid">
                   {userPosts.map((post, index) => {
-                    
                     const multipleImages = checkMultipleImages(post) > 1;
                     const imageToShow = Object.values(post).find((value) => {
                       return (
@@ -351,7 +390,9 @@ const Profile = () => {
                         {imageToShow && (
                           <img src={imageToShow} alt="Post Image" />
                         )}
-                        {multipleImages && <RiCheckboxMultipleBlankFill className="ico-multiple"/>}
+                        {multipleImages && (
+                          <RiCheckboxMultipleBlankFill className="ico-multiple" />
+                        )}
                       </button>
                     );
                   })}

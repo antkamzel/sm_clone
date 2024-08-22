@@ -51,18 +51,20 @@ const Home = () => {
 
     let orderedPosts = [...stateposts];
     setAllPosts(null);
-    if (index === 0) {
+    if (index == 0) {
+      // order from new to old
       orderedPosts.sort((a, b) => {
         return new Date(b.created_at) - new Date(a.created_at);
       });
-    } else {
+    } else if(index == 1) {
+      // order the most likes first
       orderedPosts.sort((a, b) => {
         return b.likes.length - a.likes.length;
       });
     }
     setTimeout(() => {
       setAllPosts(orderedPosts);
-    }, 20);
+    }, 150);
   };
 
   const setActiveCategory = () => {
@@ -104,6 +106,7 @@ const Home = () => {
     await supabase.auth.signOut();
     dispatch(clearPosts());
     dispatch(clearUser());
+    window.localStorage.removeItem('home-active-category');
     nav("/login", { replace: true });
   };
 
@@ -253,6 +256,7 @@ const Home = () => {
               >
                 Popular
               </button>
+              
               {/* <button className='category-btn btn' ref={(ref) => categoriesBtnsRef.current[2] = ref} onClick={() => handleCategoryChange(2)}>Following</button> */}
             </div>
 
