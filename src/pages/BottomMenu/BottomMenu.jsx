@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import "./BottomMenu.scss";
-import { Link, Outlet } from "react-router-dom";
-import { IoCompassOutline,IoCompass, IoHome, IoHomeOutline, IoNotifications, IoNotificationsCircleOutline, IoNotificationsOutline, IoPauseCircle, IoPersonOutline } from "react-icons/io5";
+import { Outlet } from "react-router-dom";
 
 const BottomMenu = () => {
   const [activeRoute, setActiveRoute] = useState(window.localStorage.getItem('active-route') , 'home');

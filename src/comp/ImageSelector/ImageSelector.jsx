@@ -2,9 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination, Scrollbar, A11y } from "swiper/modules";
 import PopupOverlay from "../../comp/PopupOverlay/PopupOverlay";
-
 import "./ImageSelector.scss";
-import { IoAdd, IoFileTray, IoFileTrayStacked } from "react-icons/io5";
 import { LuImagePlus } from "react-icons/lu";
 
 const ImageSelector = ({ setImages, limit, defaultImg }) => {

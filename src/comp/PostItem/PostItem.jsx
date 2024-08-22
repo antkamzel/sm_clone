@@ -1,26 +1,13 @@
 import React, { forwardRef, useEffect, useRef, useState } from "react";
-import {
-  IoChatboxOutline,
-  IoDesktopOutline,
-  IoFilterOutline,
-  IoHeart,
-  IoHeartOutline,
-  IoNotificationsOutline,
-  IoSearchCircleOutline,
-  IoSearchOutline,
-  IoTimeOutline,
-  IoWifiOutline,
-} from "react-icons/io5";
-import { BsThreeDots } from "react-icons/bs";
 import profilePic from "../../assets/profile-pic.png";
 import "./PostItem.scss";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, Pagination, Scrollbar, A11y } from "swiper/modules";
+import { Navigation, Pagination } from "swiper/modules";
 import { supabase } from "../../clients/SupabaseClient";
 import { useDispatch, useSelector } from "react-redux";
 import { updatePost } from '../../state/posts/postsSlice';
 import { useNavigate } from "react-router-dom";
-import { FaHeart, FaHeartBroken } from "react-icons/fa";
+import { FaHeart, FaHeartBroken, FaRegHeart } from "react-icons/fa";
 
 
 const PostItem = forwardRef((props, ref) => {
@@ -270,7 +257,7 @@ const PostItem = forwardRef((props, ref) => {
         </div>
         <div className="post-actions">
           <button className="likes-wrapper" onClick={postLikeAction}>
-            {isLiked ? <IoHeart /> : <IoHeartOutline />}
+            {isLiked ? <FaHeart /> : <FaRegHeart />}
             {likesCounter}
           </button>
         </div>

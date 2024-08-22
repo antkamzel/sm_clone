@@ -2,13 +2,10 @@ import React, { useEffect, useRef, useState } from "react";
 import "./Home.scss";
 import profilePic from "../../assets/profile-pic.png";
 import {
-  Link,
   useNavigate,
   useSearchParams,
-  useLocation,
 } from "react-router-dom";
 import { IoAdd, IoLogOut, IoPerson } from "react-icons/io5";
-import { BsThreeDots } from "react-icons/bs";
 import { supabase } from "../../clients/SupabaseClient";
 import PostItem from "../../comp/PostItem/PostItem";
 import NewPostBtn from "../../comp/NewPostBtn/NewPostBtn";

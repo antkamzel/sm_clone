@@ -3,7 +3,6 @@ import { IoArrowBack } from "react-icons/io5";
 import "./NewPost.scss";
 import { useNavigate } from "react-router-dom";
 import ImageSelector from "../../comp/ImageSelector/ImageSelector";
-import Select from "react-dropdown-select";
 import { supabase } from "../../clients/SupabaseClient";
 import PopupOverlay from "../../comp/PopupOverlay/PopupOverlay";
 import LoaderWrapper from "../../comp/LoaderWrapper/LoaderWrapper";

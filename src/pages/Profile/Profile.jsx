@@ -1,21 +1,17 @@
 import React, { useEffect, useRef, useState } from "react";
 import "./Profile.scss";
 import {
-  Link,
   useNavigate,
   useLocation,
-  useSearchParams,
+  useSearchParams
 } from "react-router-dom";
 import { FaChevronLeft, FaSave } from "react-icons/fa";
 import { MdEdit } from "react-icons/md";
 import { supabase } from "../../clients/SupabaseClient";
 import ImageSelector from "../../comp/ImageSelector/ImageSelector";
 import { v4 } from "uuid";
-import PopupOverlay from "../../comp/PopupOverlay/PopupOverlay";
 import { useDispatch, useSelector } from "react-redux";
-import { updateAuthUserField, setUser } from "../../state/auth/userAuthSlice";
 import { updatePostUserField } from "../../state/posts/postsSlice";
-import { TbBoxMultiple } from "react-icons/tb";
 import { RiCheckboxMultipleBlankFill } from "react-icons/ri";
 
 const Profile = () => {
