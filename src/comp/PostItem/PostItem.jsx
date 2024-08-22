@@ -20,25 +20,31 @@ import { supabase } from "../../clients/SupabaseClient";
 import { useDispatch, useSelector } from "react-redux";
 import { updatePost } from '../../state/posts/postsSlice';
 import { useNavigate } from "react-router-dom";
+import { FaHeart, FaHeartBroken } from "react-icons/fa";
 
 
 const PostItem = forwardRef((props, ref) => {
 
-  const stateauthuser = useSelector((state) => state.authuser.authuser);
-  const stateposts = useSelector((state) => state.posts.posts);
+  // const stateauthuser = useSelector((state) => state.authuser.authuser);
+  // const stateposts = useSelector((state) => state.posts.posts);
 
   const dispatch = useDispatch();
   const nav = useNavigate();
 
   const swiperRef = useRef(null);
+  const heartIcoRef = useRef(null);
+  const heartBrokenIcoRef = useRef(null);
   // states
   const [images, setImages] = useState(null);
-  const [localData, setLocalData] = useState(null);
+  const [localData, setLocalData] = useState();
 
   const [isLiked, setIsLiked] = useState(false);
-  const [contentReady, setContentReady] = useState(false);
   const [likesCounter, setLikesCounter] = useState(0);
   const [commentsCounter, setCommentsCounter] = useState(0);
+
+  // State to track double-tap
+  const [lastTap, setLastTap] = useState(0);
+
   // ------------end of states
 
   // functions
@@ -147,6 +153,34 @@ const PostItem = forwardRef((props, ref) => {
       console.error("Error adjusting aspect ratio:", error);
     }
   };
+
+  const handleTap = (e) => {
+    const currentTime = new Date().getTime();
+    const tapLength = currentTime - lastTap;
+
+    if (tapLength < 300 && tapLength > 0) {
+      // Double-tap detected
+      handleDoubleTap();
+      if(isLiked == false){
+        heartIcoRef.current.classList.remove('inv');
+        setTimeout(() => {
+          heartIcoRef.current.classList.add('inv');
+        }, 850);
+      }
+      else{
+        heartBrokenIcoRef.current.classList.remove('inv');
+        setTimeout(() => {
+          heartBrokenIcoRef.current.classList.add('inv');
+        }, 850);
+      }
+    }
+
+    setLastTap(currentTime);
+  };
+
+  const handleDoubleTap = () => {
+    postLikeAction(); // Call the like action on double-tap
+  };
   // ----------------end of functions
 
   useEffect(() => {
@@ -172,13 +206,9 @@ const PostItem = forwardRef((props, ref) => {
     setLocalData(props.postprop)
   }, []);
 
-  // useEffect(() => {
-
-  // }, [stateauthuser])
-
   return (
     <>
-      <div className="post-item" id={props.postprop.id} ref={ref}>
+      <div className="post-item" id={props.postprop.id} ref={ref} onTouchStart={handleTap}>
         <div className="post-top-row" onClick={() => {
           nav(`/profile?id=${props.postprop.user}`)
         }}>
@@ -197,6 +227,12 @@ const PostItem = forwardRef((props, ref) => {
           
         </div>
         <div className="post-slider" ref={swiperRef}>
+          <div className="ico-heart inv" ref={heartIcoRef}>
+            <FaHeart/>
+          </div>
+          <div className="ico-heart inv" ref={heartBrokenIcoRef}>
+            <FaHeartBroken/>
+          </div>
           {images ? (
             <Swiper
               modules={[Navigation, Pagination]}

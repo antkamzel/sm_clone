@@ -33,6 +33,7 @@
     transition: all 0.3s ease-in-out;
     opacity: 0;
     letter-spacing: 1px;
+    font-size: var(--fs-3);
 }
 
 .new-post-btn button.open {
@@ -45,6 +46,6 @@
 
 .new-post-btn button.open p {
     margin-right: var(--spacing-0);
-    width: 130px;
+    width: 160px;
     opacity: 1;
 }

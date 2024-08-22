@@ -48,6 +48,19 @@
   width: 100%;
   min-height: 200px;
   max-height: 390px;
+  position: relative;
+}
+
+.post-item .post-slider .ico-heart{
+  display: grid;
+  place-items: center;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(1);
+  z-index: 2;
+  font-size: var(--fs-9);
+  transition: 0.3s ease;
 }
 
 .post-item .post-slider img {
@@ -141,4 +154,10 @@
   100% {
     opacity: 1;
   }
+}
+
+
+.post-item .inv{
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.2) !important;
 }

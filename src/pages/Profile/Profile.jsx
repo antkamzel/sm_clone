@@ -15,6 +15,8 @@ import PopupOverlay from "../../comp/PopupOverlay/PopupOverlay";
 import { useDispatch, useSelector } from "react-redux";
 import { updateAuthUserField, setUser } from "../../state/auth/userAuthSlice";
 import { updatePostUserField } from "../../state/posts/postsSlice";
+import { TbBoxMultiple } from "react-icons/tb";
+import { RiCheckboxMultipleBlankFill } from "react-icons/ri";
 
 const Profile = () => {
   const nav = useNavigate();
@@ -149,8 +151,7 @@ const Profile = () => {
         imageresp = supabase.storage
           .from("profilePics")
           .getPublicUrl(resp1.data.path);
-      }
-      else{
+      } else {
         imageresp = localUser.profile_pic;
       }
     } catch (err) {
@@ -161,12 +162,18 @@ const Profile = () => {
       .update({
         username: updatedInfo.username,
         email: updatedInfo.email,
-        profile_pic: localUser.profile_pic instanceof File ? imageresp.data.publicUrl: imageresp
+        profile_pic:
+          localUser.profile_pic instanceof File
+            ? imageresp.data.publicUrl
+            : imageresp,
       })
       .eq("id", stateauthuser.id);
 
     if (!error2) {
-      updatedInfo.profile_pic = localUser.profile_pic instanceof File ? imageresp.data.publicUrl: imageresp;
+      updatedInfo.profile_pic =
+        localUser.profile_pic instanceof File
+          ? imageresp.data.publicUrl
+          : imageresp;
       setLocalUser(updatedInfo);
       setOldCreds(updatedInfo);
       console.log("updated");
@@ -218,7 +225,7 @@ const Profile = () => {
     } else {
       const resp = await supabase
         .from("posts")
-        .select("*,room_types(type), complexity(name), users(*), duration(*)")
+        .select("*, users(*)")
         .eq("user", searchParams.get("id"));
       if (resp.data) {
         resp.data.sort((a, b) => {
@@ -227,6 +234,24 @@ const Profile = () => {
         setUserPosts(resp.data);
       }
     }
+  };
+
+  const checkMultipleImages = (object) => {
+    let count = 0;
+
+    for (let key in object) {
+      if (
+        typeof object[key] === "string" &&
+        object[key].includes("/postImages/")
+      ) {
+        count++;
+      } else if (typeof object[key] === "object" && object[key] !== null) {
+        // Recursively check nested objects
+        checkMultipleImages(object[key]);
+      }
+    }
+
+    return count;
   };
 
   useEffect(() => {
@@ -311,6 +336,8 @@ const Profile = () => {
               {userPosts ? (
                 <div className="posts-grid">
                   {userPosts.map((post, index) => {
+                    
+                    const multipleImages = checkMultipleImages(post) > 1;
                     const imageToShow = Object.values(post).find((value) => {
                       return (
                         typeof value === "string" &&
@@ -328,6 +355,7 @@ const Profile = () => {
                         {imageToShow && (
                           <img src={imageToShow} alt="Post Image" />
                         )}
+                        {multipleImages && <RiCheckboxMultipleBlankFill className="ico-multiple"/>}
                       </button>
                     );
                   })}

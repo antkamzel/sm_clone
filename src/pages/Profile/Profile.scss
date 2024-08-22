@@ -132,20 +132,31 @@
 }
 .profile .posts-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: var(--spacing-2);
+  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+  gap: var(--spacing-0);
+  margin-inline: calc(-1 * var(--spacing-4) + 1px);
 }
 .profile .pr-post {
+  position: relative;
   background: transparent;
   border: none;
   border-radius: 0;
-  width: 100%;
-  height: 110px;
+  max-width: 100%;
+  aspect-ratio: 1/1;
+  overflow: hidden;
   img {
     width: 100%;
     height: 100%;
     object-fit: cover;
   }
+}
+
+.profile .pr-post .ico-multiple{
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  z-index: 20;
+  font-size: var(--fs-4);
 }
 
 .profile .posts-container .pr-skeleton {

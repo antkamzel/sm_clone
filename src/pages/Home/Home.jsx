@@ -48,14 +48,9 @@ const Home = () => {
       top: 0,
       behavior: "smooth",
     });
+
     window.localStorage.setItem("home-active-category", index);
-    categoriesBtnsRef.current.forEach((buttonRef, i) => {
-      if (i === index) {
-        buttonRef.classList.add("is-selected");
-      } else {
-        buttonRef.classList.remove("is-selected");
-      }
-    });
+    setActiveCategory();
 
     let orderedPosts = [...stateposts];
     setAllPosts(null);
@@ -72,6 +67,23 @@ const Home = () => {
       setAllPosts(orderedPosts);
     }, 20);
   };
+
+  const setActiveCategory = () => {
+    const index = window.localStorage.getItem("home-active-category");
+    if(index){
+      categoriesBtnsRef.current.forEach((element, i) => {
+        if(i == index){ 
+          element.classList.add('is-selected')
+        }
+        else{
+          element.classList.remove('is-selected');
+        }
+      });
+    }
+    else{
+      window.localStorage.setItem("home-active-category", 0); 
+    }
+  }
 
   const toggleProfilePopup = (e) => {
     profilePopup.current.classList.toggle("hidden");
@@ -99,9 +111,7 @@ const Home = () => {
   };
 
   const fetchPosts = async () => {
-    const resp = await supabase
-      .from("posts")
-      .select("*, users(*)");
+    const resp = await supabase.from("posts").select("*, users(*)");
 
     await Promise.all(
       resp.data.map(async (post) => {
@@ -163,36 +173,13 @@ const Home = () => {
       setAllPosts(stateposts);
       setContentReady(true);
     }
-    // Check if 'updates' parameter is set to 'true'
-    // const updates = searchParams.get("updates") === "true";
-
-    // // if there is/is not an updates paramter
-    // if (!updates) {
-    //   if (stateposts.length > 0) {
-    //     setAllPosts(stateposts); // Use the posts from Redux state
-    //     setContentReady(true); // Mark content as ready
-    //   } else {
-    //     fetchPosts(); // Fetch posts from the database if not in state
-    //   }
-    // } else {
-    //   fetchPosts();
-    // }
-    // searchParams.delete("updates");
-    // setSearchParams(searchParams, { replace: true });
   }, []);
 
+
   useEffect(() => {
-    if (categoriesBtnsRef.current.length > 0) {
-      const index = window.localStorage.getItem("home-active-category");
-      categoriesBtnsRef.current.forEach((buttonRef, i) => {
-        if (i === JSON.parse(index)) {
-          buttonRef.classList.add("is-selected");
-        } else {
-          buttonRef.classList.remove("is-selected");
-        }
-      });
-    }
-  }, [allPosts]);
+    setActiveCategory();
+  }, [allPosts])
+
 
   useEffect(() => {
     setLocalUser({
