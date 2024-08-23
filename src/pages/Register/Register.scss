@@ -29,7 +29,7 @@
 }
 
 .register .register-form .profilepic-selector .choose-image-wrapper {
-    max-height: 42px; width: 42px;
+    height: 42px !important; width: 42px;
 }
 
 .register .register-form .profilepic-selector .choose-image-wrapper .swiper-container {

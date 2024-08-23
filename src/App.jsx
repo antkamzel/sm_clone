@@ -1,8 +1,11 @@
 import React, { useEffect } from "react";
-import { Outlet, useNavigate, useLocation } from "react-router-dom";
+import { Outlet, useNavigate, useLocation, BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { supabase } from "./clients/SupabaseClient";
 import { setUser } from "./state/auth/userAuthSlice";
 import { useDispatch } from "react-redux";
+import Search from "./pages/Search/Search";
+import Profile from "./pages/Profile/Profile";
+import Home from "./pages/Home/Home";
 
 const App = () => {
   const nav = useNavigate();

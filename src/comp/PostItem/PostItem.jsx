@@ -145,7 +145,7 @@ const PostItem = forwardRef((props, ref) => {
     const currentTime = new Date().getTime();
     const tapLength = currentTime - lastTap;
 
-    if (tapLength < 300 && tapLength > 0) {
+    if (tapLength < 180 && tapLength > 0) {
       // Double-tap detected
       handleDoubleTap();
       if(isLiked == false){

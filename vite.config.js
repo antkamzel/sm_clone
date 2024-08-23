@@ -31,8 +31,8 @@ export default defineConfig({
             src: "icons/android-launchericon-512-512.png",
             sizes: "512x512",
             type: "image/png",
-          },
-        ],
+          }
+        ]
       },
       workbox: {
         runtimeCaching: [

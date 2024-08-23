@@ -16,6 +16,8 @@ import { Provider } from "react-redux";
 import store from "./state/store.js";
 import Profile from "./pages/Profile/Profile.jsx";
 import Posts from "./pages/Posts/Posts.jsx";
+import NotFound404 from "./pages/404/404.jsx";
+import Search from "./pages/Search/Search.jsx";
 
 document.body.setAttribute(
   "class",
@@ -25,39 +27,45 @@ document.body.setAttribute(
 const router = createBrowserRouter([
   {
     path: "/", // Root path
-    element: <App />,
+    element: <App />, // Main application wrapper
     children: [
-      // {
-      //   path: "",
-      //   element: <Navigate to="login" />, // Redirect from "/" to "/login"
-      // },
+      {
+        path: "*",
+        element: <NotFound404 />, // Catch-all for 404 pages
+      },
       {
         path: "home",
-        element: <Home />,
+        element: <Home />, // Home page route
+        children: [
+          {
+            path: "search", // Child route for Search page
+            element: <Search />,
+          },
+        ],
       },
       {
         path: "profile",
-        element: <Profile />,
+        element: <Profile />, // Profile page route
       },
       {
         path: "posts/:postid",
-        element: <Posts />,
+        element: <Posts />, // Dynamic route for individual posts
       },
       {
         path: "notifications",
-        element: <Notifications />,
+        element: <Notifications />, // Notifications page route
       },
       {
         path: "new-post",
-        element: <NewPost />,
+        element: <NewPost />, // New post creation page route
       },
       {
         path: "login",
-        element: <Login />,
+        element: <Login />, // Login page route
       },
       {
         path: "register",
-        element: <Register />,
+        element: <Register />, // Registration page route
       },
     ],
   },

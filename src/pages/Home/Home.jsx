@@ -2,6 +2,8 @@ import React, { useEffect, useRef, useState } from "react";
 import "./Home.scss";
 import profilePic from "../../assets/profile-pic.png";
 import {
+  Outlet,
+  useLocation,
   useNavigate,
   useSearchParams,
 } from "react-router-dom";
@@ -13,9 +15,11 @@ import LoaderWrapper from "../../comp/LoaderWrapper/LoaderWrapper";
 import { useSelector, useDispatch } from "react-redux";
 import { setPosts, clearPosts } from "../../state/posts/postsSlice";
 import { clearUser } from "../../state/auth/userAuthSlice";
+import { FaSearch } from "react-icons/fa";
 
 const Home = () => {
   // Get the search parameters from the URL
+  const location = useLocation();
   const nav = useNavigate();
   const dispatch = useDispatch();
   const [searchParams, setSearchParams] = useSearchParams();
@@ -56,7 +60,7 @@ const Home = () => {
       orderedPosts.sort((a, b) => {
         return new Date(b.created_at) - new Date(a.created_at);
       });
-    } else if(index == 1) {
+    } else if (index == 1) {
       // order the most likes first
       orderedPosts.sort((a, b) => {
         return b.likes.length - a.likes.length;
@@ -69,20 +73,18 @@ const Home = () => {
 
   const setActiveCategory = () => {
     const index = window.localStorage.getItem("home-active-category");
-    if(index){
+    if (index) {
       categoriesBtnsRef.current.forEach((element, i) => {
-        if(i == index){ 
-          element.classList.add('is-selected')
-        }
-        else{
-          element.classList.remove('is-selected');
+        if (i == index) {
+          element.classList.add("is-selected");
+        } else {
+          element.classList.remove("is-selected");
         }
       });
+    } else {
+      window.localStorage.setItem("home-active-category", 0);
     }
-    else{
-      window.localStorage.setItem("home-active-category", 0); 
-    }
-  }
+  };
 
   const toggleProfilePopup = (e) => {
     profilePopup.current.classList.toggle("hidden");
@@ -106,7 +108,7 @@ const Home = () => {
     await supabase.auth.signOut();
     dispatch(clearPosts());
     dispatch(clearUser());
-    window.localStorage.removeItem('home-active-category');
+    window.localStorage.removeItem("home-active-category");
     nav("/login", { replace: true });
   };
 
@@ -173,13 +175,13 @@ const Home = () => {
       setAllPosts(stateposts);
       setContentReady(true);
     }
-  }, []);
 
+    console.log('init run');
+  }, []);
 
   useEffect(() => {
     setActiveCategory();
-  }, [allPosts])
-
+  }, [allPosts]);
 
   useEffect(() => {
     setLocalUser({
@@ -206,84 +208,96 @@ const Home = () => {
 
   return (
     <div className="container-small">
-      <div className="home" onClick={closePopup}>
-        <div className="home-sticky-top">
-          <div
-            role="button"
-            className="left-col profile-btn"
-            onClick={(ev) => toggleProfilePopup(ev)}
-            aria-haspopup="true"
-          >
-            <img
-              src={localUser.profile_pic ? localUser.profile_pic : profilePic}
-              alt="profile picture"
-            />
-            <p>{localUser.username}</p>
-            <div className="profile-popup popup hidden" ref={profilePopup}>
-              {/* <button className='btn' onClick={(ev) => changeTheme(ev)}>
+      {location.pathname.includes("home/") ? (
+        <Outlet />
+      ) : (
+        <div className="home" onClick={closePopup}>
+          <div className="home-sticky-top">
+            <div
+              role="button"
+              className="left-col profile-btn"
+              onClick={(ev) => toggleProfilePopup(ev)}
+              aria-haspopup="true"
+            >
+              <img
+                src={localUser.profile_pic ? localUser.profile_pic : profilePic}
+                alt="profile picture"
+              />
+              <p>{localUser.username}</p>
+              <div className="profile-popup popup hidden" ref={profilePopup}>
+                {/* <button className='btn' onClick={(ev) => changeTheme(ev)}>
                   {theme === 'dark-theme' ? <IoSunny/> : <IoMoon/>}{theme === 'dark-theme' ? 'Light' : 'Dark'}
                 </button>
                  */}
-              <button className="btn" onClick={(ev) => goToProfile(ev)}>
-                <IoPerson /> Profile
-              </button>
-              <button className="btn" onClick={(ev) => handleLogout(ev)}>
-                <IoLogOut /> Log out
-              </button>
+                <button className="btn" onClick={(ev) => goToProfile(ev)}>
+                  <IoPerson /> Profile
+                </button>
+                <button className="btn" onClick={(ev) => handleLogout(ev)}>
+                  <IoLogOut /> Log out
+                </button>
+              </div>
             </div>
-          </div>
-          <div className="right-col">
-            {/* <Link to={'/notifications'} className='notifications-link'>
+            <div className="right-col">
+              {/* <Link to={'/notifications'} className='notifications-link'>
               <IoNotificationsOutline/>
             </Link> */}
-          </div>
-        </div>
-
-        {contentReady ? (
-          <div className="home-main-content">
-            <div className="categories-wrapper">
               <button
-                className="category-btn btn is-selected"
-                ref={(ref) => (categoriesBtnsRef.current[0] = ref)}
-                onClick={() => handleCategoryChange(0)}
+                className="btnr ico-only"
+                onClick={() => {
+                  nav("search");
+                }}
               >
-                Newest
+                <FaSearch />
               </button>
-              <button
-                className="category-btn btn"
-                ref={(ref) => (categoriesBtnsRef.current[1] = ref)}
-                onClick={() => handleCategoryChange(1)}
-              >
-                Popular
-              </button>
-              
-              {/* <button className='category-btn btn' ref={(ref) => categoriesBtnsRef.current[2] = ref} onClick={() => handleCategoryChange(2)}>Following</button> */}
             </div>
+          </div>
 
-            {/* <div className='posts-wrapper'>
+          {contentReady ? (
+            <div className="home-main-content">
+              <div className="categories-wrapper">
+                <button
+                  className="category-btn btn is-selected"
+                  ref={(ref) => (categoriesBtnsRef.current[0] = ref)}
+                  onClick={() => handleCategoryChange(0)}
+                >
+                  Newest
+                </button>
+                <button
+                  className="category-btn btn"
+                  ref={(ref) => (categoriesBtnsRef.current[1] = ref)}
+                  onClick={() => handleCategoryChange(1)}
+                >
+                  Popular
+                </button>
+
+                {/* <button className='category-btn btn' ref={(ref) => categoriesBtnsRef.current[2] = ref} onClick={() => handleCategoryChange(2)}>Following</button> */}
+              </div>
+
+              {/* <div className='posts-wrapper'>
             {allPosts.map((post, index) => {
               return <PostItem key={index} info={post}></PostItem>
             })}
           </div> */}
-            {allPosts && (
-              <div className="posts-wrapper">
-                {allPosts.map((element, index) => {
-                  return (
-                    <PostItem
-                      key={index}
-                      auth_user={stateauthuser}
-                      postprop={element}
-                    />
-                  );
-                })}
-              </div>
-            )}
-          </div>
-        ) : (
-          <LoaderWrapper />
-        )}
-        {contentReady && <NewPostBtn icon={<IoAdd />} />}
-      </div>
+              {allPosts && (
+                <div className="posts-wrapper">
+                  {allPosts.map((element, index) => {
+                    return (
+                      <PostItem
+                        key={index}
+                        auth_user={stateauthuser}
+                        postprop={element}
+                      />
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+          ) : (
+            <LoaderWrapper />
+          )}
+          {contentReady && <NewPostBtn icon={<IoAdd />} />}
+        </div>
+      )}
     </div>
   );
 };

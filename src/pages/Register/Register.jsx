@@ -5,15 +5,20 @@ import { supabase } from "../../clients/SupabaseClient";
 import LoaderDots from "../../comp/LoaderDots/LoaderDots";
 import ImageSelector from "../../comp/ImageSelector/ImageSelector";
 import { v4 } from "uuid";
+import { useDispatch, useSelector } from "react-redux";
+import { setUser } from "../../state/auth/userAuthSlice";
 
 const Register = () => {
   const nav = useNavigate();
+  const dispatch = useDispatch();
 
-  const [user, setUser] = useState({
+  const stateauthuser = useSelector((state) => state.authuser.authuser);
+
+  const [localUser, setLocalUser] = useState({
     username: "",
     email: "",
     password: "",
-    image: "",
+    profile_pic: null,
   });
 
   const [enableButton, setEnableButton] = useState(0);
@@ -31,50 +36,67 @@ const Register = () => {
     setIsRegistering(true);
 
     const resp = await supabase.auth.signUp({
-      email: user.email,
-      password: user.password,
+      email: localUser.email,
+      password: localUser.password,
     });
-    if (!resp.error) {
-      const fileName = `profile-${v4() + Date.now()}.png`;
-      let imageresp;
-      try {
+    // if register does not work
+    if (resp.error) {
+      console.log(resp.error);
+      return;
+    }
+
+    // if register works, go on and add user to users table and
+    //profile pic to bucket
+    const fileName = `profile-${v4() + Date.now()}.png`;
+    let imageresp;
+    // try adding the profile_pic file to the bucket
+    try {
+      if(localUser.profile_pic){
         const resp1 = await supabase.storage
-          .from("profilePics")
-          .upload(fileName, user.image);
+        .from("profilePics")
+        .upload(fileName, localUser.profile_pic);
         // get url to
         imageresp = supabase.storage
           .from("profilePics")
           .getPublicUrl(resp1.data.path);
-      } catch (err) {
-        console.log(err);
-      }
-
-      const userId = resp.data.user.id;
-      const resp2 = await supabase
-        .from("users")
-        .update({
-          username: user.username,
-          email: user.email,
+        setLocalUser((prevState) => ({
+          ...prevState,
           profile_pic: imageresp.data.publicUrl,
-        })
-        .eq("id", userId);
-
-      if (!resp2.error) {
-        nav("/home");
+        }));
       }
+    } catch (err) {
+      console.log(err);
+    }
+
+    const userId = resp.data.user.id;
+    const resp2 = await supabase
+      .from("users")
+      .update({
+        username: localUser.username,
+        email: localUser.email,
+        profile_pic: imageresp ? imageresp.data.publicUrl : null,
+      })
+      .eq("id", userId);
+
+    if (!resp2.error) {
+      const temp = { ...localUser };
+      temp.profile_pic = imageresp ? imageresp.data.publicUrl : null;
+      temp.id = userId;
+      dispatch(setUser(temp));
+      nav("/home", {replace: true});
     }
     setIsRegistering(false);
   };
 
   const handleGetImages = (files) => {
-    setUser((prevState) => ({
+    setLocalUser((prevState) => ({
       ...prevState,
-      image: files[0],
+      profile_pic: files[0],
     }));
   };
 
   return (
-    <div className="container-small" style={{height: '100vh'}}>
+    <div className="container-small" style={{ height: "100vh" }}>
       <div className="register">
         <div className="register-form">
           <h2 className="title">Register</h2>
@@ -90,12 +112,12 @@ const Register = () => {
                 ev.target.value === "" || ev.target.value.length < 5
                   ? (usernameError.current.style.display = "flex")
                   : (usernameError.current.style.display = "none");
-                setUser({ ...user, username: ev.target.value });
+                setLocalUser({ ...localUser, username: ev.target.value });
               }}
             />
             <span ref={usernameError} className="error-message">
-              {user.username.length < 5 && user.username.length > 0
-                ? "Username must be at least 8 characters"
+              {localUser.username.length < 5 && localUser.username.length > 0
+                ? "Username must be at least 5 characters"
                 : "Username field is mandatory"}
             </span>
           </div>
@@ -112,7 +134,7 @@ const Register = () => {
                 } else {
                   emailError.current.style.display = "none";
                 }
-                setUser({ ...user, email: ev.target.value });
+                setLocalUser({ ...localUser, email: ev.target.value });
               }}
             />
             <span ref={emailError} className="error-message">
@@ -130,11 +152,11 @@ const Register = () => {
                 ev.target.value === "" || ev.target.value.length < 8
                   ? (passwordError.current.style.display = "flex")
                   : (passwordError.current.style.display = "none");
-                setUser({ ...user, password: ev.target.value });
+                setLocalUser({ ...localUser, password: ev.target.value });
               }}
             />
             <span ref={passwordError} className="error-message">
-              {user.password.length < 8 && user.password.length > 0
+              {localUser.password.length < 8 && localUser.password.length > 0
                 ? "Password must be at least 8 characters"
                 : "Password field is mandatory"}
             </span>
@@ -148,9 +170,9 @@ const Register = () => {
           </Link>
           <button
             disabled={
-              user.username.length < 5 ||
-              user.email === "" ||
-              user.password.length < 8
+              localUser.username.length < 5 ||
+              localUser.email === "" ||
+              localUser.password.length < 8
             }
             className="submit-btn"
             onClick={() => handleRegister()}

@@ -145,6 +145,10 @@
   flex-direction: column;
   gap: var(--spacing-5);
 }
+.profile .empty-posts{
+  font-size: var(--fs-5);
+  text-align: center;
+}
 .profile .posts-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
