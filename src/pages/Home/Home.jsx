@@ -241,14 +241,14 @@ const Home = () => {
               {/* <Link to={'/notifications'} className='notifications-link'>
               <IoNotificationsOutline/>
             </Link> */}
-              <button
+              {/* <button
                 className="btnr ico-only"
                 onClick={() => {
                   nav("search");
                 }}
               >
                 <FaSearch />
-              </button>
+              </button> */}
             </div>
           </div>
 
